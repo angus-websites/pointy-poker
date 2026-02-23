@@ -1,0 +1,102 @@
+services:
+  app:
+    image: local/bud
+    container_name: bud-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      secrets:
+        - composer_auth
+    environment:
+      APP_NAME: Bud (Docker)
+      APP_ENV: production
+      APP_KEY: base64:YZ2w1r0DV2J5QDERTYUCjJenuukcTjnua+UrZNGSIsw=
+      APP_DEBUG: true
+      APP_URL: http://127.0.0.1:8123
+
+      # Cache & Redis
+      CACHE_DRIVER: redis
+      REDIS_HOST: redis
+      REDIS_PASSWORD: null
+      REDIS_PORT: 6379
+      REDIS_PREFIX: bud_
+
+      # Database (MySQL)
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: bud
+      DB_USERNAME: bud_user
+      DB_PASSWORD: secret
+
+      # Mail (Mailpit)
+      MAIL_MAILER: smtp
+      MAIL_HOST: mailpit
+      MAIL_PORT: 1025
+      MAIL_USERNAME: null
+      MAIL_PASSWORD: null
+      MAIL_ENCRYPTION: null
+      MAIL_FROM_ADDRESS: no-reply@bud.test
+      MAIL_FROM_NAME: Bud
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      mailpit:
+        condition: service_started
+    networks:
+      - bud-net
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: bud-redis
+    networks:
+      - bud-net
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.1
+    container_name: bud-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: bud
+      MYSQL_USER: bud_user
+      MYSQL_PASSWORD: secret
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - bud-net
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p password" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: bud-mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - bud-net
+    restart: unless-stopped
+
+secrets:
+  composer_auth:
+    file: ./auth.json
+
+volumes:
+  mysql-data:
+
+networks:
+  bud-net:
+    driver: bridge
