@@ -15,7 +15,8 @@
             </div>
             <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0 space-x-5">
                 @auth
-                    <flux:button wire:navigate :href="route('dashboard')" variant="primary">Dashboard
+                    <flux:button wire:navigate :href="route('rooms.index')" variant="primary">
+                        My Rooms
                     </flux:button>
                 @else
                     <flux:button wire:navigate :href="route('login')" variant="ghost">Login</flux:button>
@@ -52,8 +53,8 @@
                 <div class="px-5 py-6">
                     <div class="mt-6 space-y-4">
                         @auth
-                            <flux:button wire:navigate :href="route('dashboard')" class="w-full" variant="primary">
-                                Dashboard
+                            <flux:button wire:navigate :href="route('rooms.index')" class="w-full" variant="primary">
+                                My Rooms
                             </flux:button>
                         @else
                             @if (Route::has('register'))

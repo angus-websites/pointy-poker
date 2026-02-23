@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\RoomController;
 use App\Http\Controllers\SystemController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,8 +12,8 @@ Route::get('/', function () {
 // App Routes
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // Dashboard
-    Route::view('dashboard', 'app.dashboard')->name('dashboard');
+    // Rooms Index
+    Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
 
 });
 
