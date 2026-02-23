@@ -3,9 +3,9 @@
   <img alt="Bud" src="public/assets/images/logo/logo.png" width="200">
 </picture>
 
-# Bud
+# Pointy Poker
 
-Bud is a boilerplate for Laravel...
+A site to allow teams to estimate story points. Built with ...
 
 - Laravel 12
 - Authentication

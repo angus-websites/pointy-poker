@@ -1,7 +1,7 @@
-Bud ("we", "our", or "the service") respects your privacy and is committed to protecting your personal data. This
+Pointy Poker ("we", "our", or "the service") respects your privacy and is committed to protecting your personal data. This
 Privacy Policy explains what information we collect, how we use it, and the rights you have over your data.
 
-By using Bud, you agree to the collection and use of information in accordance with this policy.
+By using Pointy Poker, you agree to the collection and use of information in accordance with this policy.
 
 ---
 
@@ -20,7 +20,7 @@ We only collect the data necessary to provide our service.
 
 We use your data only to:
 
-- Provide and operate the Bud-lite service
+- Provide and operate the Pointy Poker service
 - Allow you to log, view, and manage your data
 - Authenticate your account and keep it secure
 - Communicate essential service-related messages (such as password resets)
@@ -31,7 +31,7 @@ We do **not** sell your data and do **not** use it for advertising or profiling.
 
 ## 3. Cookies & Sessions
 
-Bud-lite does **not** use tracking or analytics cookies.
+Pointy Poker does **not** use tracking or analytics cookies.
 
 We use essential session data stored in our database to:
 
@@ -80,7 +80,7 @@ These actions can be performed directly within the application or by contacting 
 
 ## 7. Third-Party Services
 
-Bud-lite uses trusted infrastructure providers (such as hosting and email services) strictly to operate the service.
+Pointy Poker uses trusted infrastructure providers (such as hosting and email services) strictly to operate the service.
 
 We do not share your reminder or health data with third parties for marketing or analytics purposes.
 
@@ -88,7 +88,7 @@ We do not share your reminder or health data with third parties for marketing or
 
 ## 8. Children’s Privacy
 
-Bud-lite is not intended for use by children under the age of 16. We do not knowingly collect personal data from
+Pointy Porker is not intended for use by children under the age of 16. We do not knowingly collect personal data from
 children.
 
 ---
@@ -97,14 +97,6 @@ children.
 
 We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision
 date.
-
----
-
-## 10. Contact
-
-If you have any questions about this Privacy Policy or your data, you can contact us at:
-
-**Email:** support@bud-lite.com
 
 ---
 
