@@ -1,4 +1,4 @@
-<x-layouts::public title="Welcome to Bud">
+<x-layouts::public title="Welcome to Pointy Poker">
     <x-page-container>
         <div>
             <div class="mx-auto max-w-3xl md:text-center">

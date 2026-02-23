@@ -1,4 +1,4 @@
-<x-layouts::public title="Welcome to Bud">
+<x-layouts::public title="Pointy Poker Privacy Policy">
     <x-page-container>
         <div>
             <x-page-title heading="Privacy Policy " subtitle="Updated January 2026"/>

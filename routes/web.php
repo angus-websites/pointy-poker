@@ -9,6 +9,9 @@ Route::get('/', function () {
     return view('public.home');
 })->name('home');
 
+// Room route
+Route::get('/rooms/{slug}', [RoomController::class, 'show'])->name('room.show');
+
 // App Routes
 Route::middleware(['auth', 'verified'])->group(function () {
 

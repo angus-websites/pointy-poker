@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Room;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Database\Factories\RoomFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,9 +17,15 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
+        $user = User::factory()->create([
+            'name' => 'Bob',
             'email' => 'test@example.com',
         ]);
+
+        // Create 3 rooms for Bob
+        Room::factory()
+            ->forOwner($user)
+            ->count(3)
+            ->create();
     }
 }
