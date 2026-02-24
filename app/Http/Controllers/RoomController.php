@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ParticipantJoined;
 use App\Services\RoomService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -44,6 +45,8 @@ class RoomController extends Controller
             if ($participant) {
 
                 // TODO Update the participant's last active timestamp
+
+                broadcast(new ParticipantJoined($participant))->toOthers();
 
                 return view('public.rooms.show', compact('room', 'participant'));
             }

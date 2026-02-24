@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
  *
  * @property int $id
  * @property int $room_id
+ * @property string $display_name
  * @property string|null $token
  * @property Carbon|null $last_seen_at
  */

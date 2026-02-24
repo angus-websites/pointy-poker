@@ -46,26 +46,6 @@
         <flux:heading size="lg" level="2" class="mb-5">
             Results
         </flux:heading>
-        <flux:table>
-            <flux:table.columns>
-                <flux:table.column class="w-1/2">User</flux:table.column>
-                <flux:table.column class="w-1/4">Status</flux:table.column>
-                <flux:table.column class="w-1/4">Points</flux:table.column>
-            </flux:table.columns>
-
-            <flux:table.rows>
-                @foreach($room->participants as $participant)
-                    <flux:table.row>
-                        <flux:table.cell>{{ $participant->display_name }}</flux:table.cell>
-                        <flux:table.cell>
-                            <flux:badge color="red" size="sm" inset="top bottom">Waiting</flux:badge>
-                        </flux:table.cell>
-                        <flux:table.cell variant="strong">
-                            <flux:text class="text-xs">Hidden</flux:text>
-                        </flux:table.cell>
-                    </flux:table.row>
-                @endforeach
-            </flux:table.rows>
-        </flux:table>
+        <livewire:rooms.live-table :room="$room"/>
     </section>
 </x-layouts::app>
