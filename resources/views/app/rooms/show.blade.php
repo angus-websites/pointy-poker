@@ -24,6 +24,23 @@
         </div>
     </section>
 
+    {{-- Estimate --}}
+    <section class="my-10">
+        <flux:heading size="lg" level="2" class="mb-5">
+            Available Points
+        </flux:heading>
+
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 gap-4">
+            @foreach(['1', '2', '3', '5', '8', '13', '20'] as $point)
+                <flux:card size="sm" class="hover:bg-zinc-50 dark:hover:bg-zinc-700">
+                    <flux:text class="mt-2 text-center">
+                        {{ $point }}
+                    </flux:text>
+                </flux:card>
+            @endforeach
+        </div>
+    </section>
+
     {{-- Results --}}
     <section class="my-10">
         <flux:heading size="lg" level="2" class="mb-5">

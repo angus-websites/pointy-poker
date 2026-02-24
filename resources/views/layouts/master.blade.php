@@ -4,7 +4,7 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="bg-[#F2FCFF] dark:bg-zinc-800">
+    <body class="bg-zinc-50 dark:bg-zinc-800">
         {{ $slot }}
     </body>
     <flux:toast />
