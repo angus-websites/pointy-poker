@@ -21,7 +21,7 @@
     <ul class="mt-5 gap-y-4 flex flex-col">
         @foreach($rooms as $room)
             <li>
-                <a href="{{route('room.show', ['slug' => $room->slug])}}" aria-label="Go to {{ $room->name }} room" wire:navigate>
+                <a href="{{route('rooms.show', ['slug' => $room->slug])}}" aria-label="Go to {{ $room->name }} room" wire:navigate>
                     <flux:card size="sm" class="hover:bg-zinc-50 dark:hover:bg-zinc-700">
                         <flux:heading class="flex items-center gap-2">{{ $room->name }}
                             <flux:icon name="arrow-up-right" class="ml-auto text-zinc-400" variant="micro"/>

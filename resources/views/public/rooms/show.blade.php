@@ -4,6 +4,9 @@
             <flux:heading size="xl" level="1">
                 {{$room->name}}
             </flux:heading>
+            <flux:text class="mt-2 text-lg">
+                Your name: {{ $participant->display_name }}
+            </flux:text>
         </div>
         <flux:separator variant="subtle"/>
 
@@ -36,25 +39,27 @@
                 </flux:table.columns>
 
                 <flux:table.rows>
-                    <flux:table.row>
-                        <flux:table.cell>Jon</flux:table.cell>
-                        <flux:table.cell>
-                            <flux:badge color="green" size="sm" inset="top bottom">Voted</flux:badge>
-                        </flux:table.cell>
-                        <flux:table.cell variant="strong">
-                            <flux:text class="text-xs">Hidden</flux:text>
-                        </flux:table.cell>
-                    </flux:table.row>
+                    @foreach($room->participants as $p)
+                        <flux:table.row
+                            @class([
+                                'bg-zinc-200/50 dark:bg-zinc-700/50' => $p->id === $participant->id
+                            ])
+                        >
+                            <flux:table.cell @class([
+                                'font-bold' => $p->id === $participant->id
+                            ])>{{ $p->display_name }}</flux:table.cell>
 
-                    <flux:table.row>
-                        <flux:table.cell>Jon</flux:table.cell>
-                        <flux:table.cell>
-                            <flux:badge color="red" size="sm" inset="top bottom">Waiting</flux:badge>
-                        </flux:table.cell>
-                        <flux:table.cell variant="strong">
-                            <flux:text class="text-xs">Hidden</flux:text>
-                        </flux:table.cell>
-                    </flux:table.row>
+                            <flux:table.cell>
+                                <flux:badge color="red" size="sm" inset="top bottom">
+                                    Waiting
+                                </flux:badge>
+                            </flux:table.cell>
+
+                            <flux:table.cell variant="strong">
+                                <flux:text class="text-xs">Hidden</flux:text>
+                            </flux:table.cell>
+                        </flux:table.row>
+                    @endforeach
                 </flux:table.rows>
             </flux:table>
         </section>

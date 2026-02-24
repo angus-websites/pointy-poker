@@ -10,7 +10,7 @@ Route::get('/', function () {
 })->name('home');
 
 // Room route
-Route::get('/rooms/{slug}', [RoomController::class, 'show'])->name('room.show');
+Route::get('/rooms/{slug}', [RoomController::class, 'show'])->name('rooms.show');
 
 // App Routes
 Route::middleware(['auth', 'verified'])->group(function () {

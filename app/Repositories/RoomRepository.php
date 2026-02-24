@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Contracts\RoomRepositoryInterface;
+use App\Models\Participant;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -34,6 +35,16 @@ class RoomRepository implements RoomRepositoryInterface
     public function findBySlug(string $slug): ?Room
     {
         return Room::where('slug', $slug)->first();
+    }
+
+    /**
+     * Find a participant by their token.
+     */
+    public function findParticipantByToken(int $room_id, string $token): ?Participant
+    {
+        return Participant::where('room_id', $room_id)
+            ->where('token', $token)
+            ->first();
     }
 
     /**

@@ -23,7 +23,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['room_id', 'browser_token']);
+            $table->unique(['room_id', 'token']);
         });
     }
 

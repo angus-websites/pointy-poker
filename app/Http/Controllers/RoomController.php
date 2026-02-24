@@ -28,7 +28,34 @@ class RoomController extends Controller
             return view('app.rooms.show', compact('room'));
         }
 
-        // Otherwise, show the public view
-        return view('public.rooms.show', compact('room'));
+        // Look for a token for this room
+        $token = request()->cookie('room_token_'.$room->id);
+
+        // If a token exists, check if it's valid for this room
+        if ($token) {
+
+            // Try and find a participant for this token and room
+            $participant = $this->roomService->getParticipantByToken(
+                $room->id,
+                $token
+            );
+
+            // If the participant exists, join the room
+            if ($participant) {
+
+                // TODO Update the participant's last active timestamp
+
+                return view('public.rooms.show', compact('room', 'participant'));
+            }
+
+            // If no participant found for this token, delete the cookie
+            else {
+                cookie()->queue(cookie()->forget('room_token_'.$room->id));
+            }
+
+        }
+
+        // Show the onboarding page for this room
+        return view('public.rooms.onboarding', compact('room'));
     }
 }

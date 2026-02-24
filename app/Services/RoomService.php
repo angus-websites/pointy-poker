@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Contracts\RoomRepositoryInterface;
+use App\Models\Participant;
 use App\Models\Room;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
@@ -10,7 +11,7 @@ use Illuminate\Support\Collection;
 class RoomService
 {
     public function __construct(
-        private RoomRepositoryInterface $roomRepository
+        protected RoomRepositoryInterface $roomRepository
     ) {}
 
     public function getOwnedRooms($user): Collection
@@ -33,5 +34,13 @@ class RoomService
 
         return $room;
 
+    }
+
+    public function getParticipantByToken(int $room_id, string $token): ?Participant
+    {
+        return $this->roomRepository->findParticipantByToken(
+            $room_id,
+            $token
+        );
     }
 }
