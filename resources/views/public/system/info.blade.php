@@ -1,4 +1,4 @@
-<x-layouts::minimal title='Bud | System info'>
+<x-layouts::minimal title='Pointy Poker | System info'>
 
     <x-page-container>
             <flux:card class="space-y-6">
