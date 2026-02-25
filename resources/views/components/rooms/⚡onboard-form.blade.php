@@ -27,7 +27,7 @@ new class extends Component {
                 'pokey_guest',
                 encrypt(json_encode([
                     'id' => (string)Str::uuid(),
-                    'display_name' => $this->name,
+                    'name' => $this->name,
                 ])),
                 60 * 24 * 365 // 1 year
             )

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ParticipantJoined;
 use App\Services\RoomService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -29,36 +28,20 @@ class RoomController extends Controller
             return view('app.rooms.show', compact('room'));
         }
 
-        // Look for a token for this room
-        $token = request()->cookie('room_token_'.$room->id);
+        // Check for a guest cookie
+        $cookie = request()->cookie('pokey_guest');
 
-        // If a token exists, check if it's valid for this room
-        if ($token) {
+        if ($cookie) {
 
-            // Try and find a participant for this token and room
-            $participant = $this->roomService->getParticipantByToken(
-                $room->id,
-                $token
-            );
+            // Decrypt and decode cookie content
+            $guestData = json_decode(decrypt($cookie), true);
 
-            // If the participant exists, join the room
-            if ($participant) {
-
-                // TODO Update the participant's last active timestamp
-
-                broadcast(new ParticipantJoined($participant))->toOthers();
-
-                return view('public.rooms.show', compact('room', 'participant'));
-            }
-
-            // If no participant found for this token, delete the cookie
-            else {
-                cookie()->queue(cookie()->forget('room_token_'.$room->id));
-            }
+            return view('public.rooms.show', compact('room', 'guestData'));
 
         }
 
         // Show the onboarding page for this room
         return view('public.rooms.onboarding', compact('room'));
+
     }
 }

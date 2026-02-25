@@ -1,14 +1,13 @@
 <?php
 
-use App\Models\Participant;
 use App\Models\Room;
 use Flux\Flux;
 use Livewire\Component;
 
 new class extends Component {
     public Room $room;
-    public ?Participant $participant;
     public array $participants = [];
+    public ?string $participantId = null;
 
 
     public function getListeners()
@@ -33,15 +32,15 @@ new class extends Component {
     </flux:table.columns>
 
     <flux:table.rows>
-        @foreach($room->participants as $p)
+        @foreach($participants as $p)
             <flux:table.row
                 @class([
-                    'bg-zinc-200/50 dark:bg-zinc-700/50' => isset($participant) && $p->id === $participant->id
+                    'bg-zinc-200/50 dark:bg-zinc-700/50' => isset($participantId) && $p['id'] === $participantId
                 ])
             >
                 <flux:table.cell @class([
-                                'font-bold' =>  isset($participant) && $p->id === $participant->id
-                            ])>{{ $p->display_name }}</flux:table.cell>
+                                'font-bold' =>  isset($participantId) && $p['id'] === $participantId
+                            ])>{{ $p['name'] }}</flux:table.cell>
 
                 <flux:table.cell>
                     <flux:badge color="red" size="sm" inset="top bottom">
