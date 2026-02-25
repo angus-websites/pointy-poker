@@ -35,12 +35,4 @@ class RoomService
         return $room;
 
     }
-
-    public function getParticipantByToken(int $room_id, string $token): ?Participant
-    {
-        return $this->roomRepository->findParticipantByToken(
-            $room_id,
-            $token
-        );
-    }
 }

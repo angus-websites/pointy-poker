@@ -27,13 +27,6 @@ class Room extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    /**
-     * Get the participants for the room.
-     */
-    public function participants(): HasMany
-    {
-        return $this->hasMany(Participant::class);
-    }
 
     /**
      * Get the rounds for the room.

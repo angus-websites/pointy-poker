@@ -21,30 +21,17 @@ new class extends Component {
         // Validate input
         $this->validate();
 
-        // Generate unique browser token
-        // TODO use service
-        $token = (string)Str::uuid();
-
-        // TODO use service here
-        $participant = Participant::create([
-            'room_id' => $this->room->id,
-            'display_name' => $this->name,
-            'token' => $token,
-            'last_seen_at' => now(),
-        ]);
-
-        // TODO use service to handle cookie and token management
-        cookie()->queue('room_token_' . $this->room->id, $token, 60 * 24 * 365);
-
-        // Notify parent component / refresh UI
-        //$this->dispatch('participantJoined');
-
-        // Log joining event
-        logger()->info('Participant joined room', [
-            'room_id' => $this->room->id,
-            'participant_id' => $participant->id,
-            'participant_name' => $participant->name,
-        ]);
+        // Create a cookie with guest info
+        cookie()->queue(
+            cookie(
+                'pokey_guest',
+                encrypt(json_encode([
+                    'id' => (string)Str::uuid(),
+                    'display_name' => $this->name,
+                ])),
+                60 * 24 * 365 // 1 year
+            )
+        );
 
         // Redirect to join room again
         return redirect()->route('rooms.show', ['slug' => $this->room->slug]);

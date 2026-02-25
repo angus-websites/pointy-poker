@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('round_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('participant_id')->constrained()->cascadeOnDelete();
-
+            $table->string('participant_key');
             $table->string('value');
             $table->timestamps();
 
-            $table->unique(['round_id', 'participant_id']);
+            $table->unique(['round_id', 'participant_key']);
         });
     }
 
