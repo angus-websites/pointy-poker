@@ -9,6 +9,17 @@ use Livewire\Component;
 new class extends Component {
     public Room $room;
     public string $guestId;
+    public string $currentVote = '';
+
+    public function mount()
+    {
+        // Fetch current vote is exists
+        $round = $this->room->round();
+        if ($round) {
+            $vote = $round->votes()->where('participant_key', $this->guestId)->first();
+            $this->currentVote = $vote ? $vote->value : '';
+        }
+    }
 
     public function vote($point)
     {
@@ -31,6 +42,8 @@ new class extends Component {
             ]
         );
 
+        $this->currentVote = $point;
+
         // Dispatch event to other participants
         event(new GuestVoted($this->room->id, $this->guestId, $point));
 
@@ -42,9 +55,30 @@ new class extends Component {
 
 <div class="grid grid-cols-3 md:grid-cols-5 gap-4">
     @foreach(['1', '2', '3', '5', '8', '13', '20'] as $point)
-        <flux:card wire:click="vote('{{ $point }}')" size="sm"
-                   class="hover:bg-zinc-50 border-lime-600! dark:border-lime-300! border dark:hover:bg-zinc-700 hover:cursor-pointer">
-            <flux:text class="mt-2 text-center">
+        <flux:card
+            wire:click="vote('{{ $point }}')"
+            size="sm"
+            @class([
+                'hover:cursor-pointer border' => true,
+
+                // Selected state
+                'border-lime-600 dark:border-lime-300 bg-lime-600 dark:bg-lime-900/40' => $currentVote === $point,
+
+                // Default state
+                'border-transparent hover:bg-zinc-50 dark:hover:bg-zinc-700 ' => $currentVote !== $point,
+            ])
+        >
+            <flux:text
+                @class([
+                 'mt-2 text-center' => true,
+
+                 // Selected state
+                 'text-white' => $currentVote === $point,
+
+                 // Default state
+                 '' => $currentVote !== $point,
+             ])
+            >
                 {{ $point }}
             </flux:text>
         </flux:card>
