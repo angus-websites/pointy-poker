@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Contracts\RoomRepositoryInterface;
 use App\Repositories\RoomRepository;
 use Carbon\CarbonImmutable;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +31,22 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        // Guest Cookie guard
+        Auth::viaRequest('guest-cookie', function (Request $request) {
+            $cookie = $request->cookie('pokey_guest');
+            if ($cookie) {
+                $guest = json_decode(decrypt($cookie), true);
+
+                return (object) [
+                    'id' => $guest['id'],
+                    'name' => $guest['name'],
+                    'admin' => false,
+                ];
+            }
+
+            return null;
+        });
     }
 
     protected function configureDefaults(): void

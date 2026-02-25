@@ -13,13 +13,36 @@ new class extends Component {
     public function getListeners()
     {
         return [
-            "echo:room.{$this->room->id},ParticipantJoined" => 'participantJoined',
+            "echo-presence:rooms.{$this->room->id},here" => 'here',
+            "echo-presence:rooms.{$this->room->id},joining" => 'joining',
+            "echo-presence:rooms.{$this->room->id},leaving" => 'leaving',
         ];
     }
 
-    public function participantJoined($payload): void
+
+    // Fired when the component receives the list of all current guests
+    public function here(array $guests)
     {
-        Flux::toast('New participant joined: ' . $payload['display_name']);
+        Flux::toast('Your changes have been saved.');
+        $this->participants = collect($guests)
+            ->reject(fn($u) => $u['admin'] ?? false)
+            ->values()
+            ->toArray();
+    }
+
+    // Fired when a new guest joins
+    public function joining(array $guest)
+    {
+        $this->participants[] = $guest;
+    }
+
+    // Fired when a guest leaves
+    public function leaving(array $guest)
+    {
+        $this->participants = collect($this->participants)
+            ->reject(fn($p) => $p['id'] === $guest['id'])
+            ->values()
+            ->toArray();
     }
 };
 ?>

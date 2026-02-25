@@ -40,6 +40,9 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'guest' => [
+            'driver' => 'guest-cookie',
+        ],
     ],
 
     /*

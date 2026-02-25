@@ -11,25 +11,33 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 /**
  * Presence channel for a room
  */
-Broadcast::channel('rooms.{roomId}', function (?User $user, $roomId) {
+Broadcast::channel('rooms.{roomId}', function (User $user, $roomId) {
 
+    // Load room
     $room = Room::findOrFail($roomId);
 
-    if ($user) {
+    // If user is not creator or guest
+    if (($user && $room->owner_id !== $user->id) || ! $user) {
+
+        $cookie = request()->cookie('pokey_guest');
+        if ($cookie) {
+            $guest = json_decode(decrypt($cookie), true);
+
+            return [
+                'id' => $guest['id'],
+                'name' => $guest['name'],
+                'admin' => false,
+            ];
+        }
+    }
+
+    if ($user && $room->owner_id === $user->id) {
         return [
             'id' => $user->id,
             'name' => $user->name,
-            'admin' => $room->user_id === $user->id,
+            'admin' => true,
         ];
     }
 
-    if (session()->has('guest_name')) {
-        return [
-            'id' => session('guest_uuid'),
-            'name' => session('guest_name'),
-            'admin' => false,
-        ];
-    }
-
-    return false;
-});
+    return [];
+}, ['guards' => ['web', 'guest']]);
