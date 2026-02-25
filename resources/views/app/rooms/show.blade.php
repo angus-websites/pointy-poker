@@ -18,10 +18,7 @@
         <flux:heading size="lg" level="2" class="mb-5">
             Controls
         </flux:heading>
-        <div>
-            <flux:button>Reset</flux:button>
-            <flux:button>Show results</flux:button>
-        </div>
+        <livewire:rooms.controls :room="$room"/>
     </section>
 
     {{-- Estimate --}}

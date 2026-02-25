@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\RoundStatus;
 use App\Models\Room;
 use Flux\Flux;
 use Livewire\Component;
@@ -16,23 +17,46 @@ new class extends Component {
             "echo-presence:rooms.{$this->room->id},here" => 'here',
             "echo-presence:rooms.{$this->room->id},joining" => 'joining',
             "echo-presence:rooms.{$this->room->id},leaving" => 'leaving',
+            "echo:rooms.{$this->room->id},.guestVoted" => 'handleGuestVoted',
         ];
+    }
+
+    public function handleGuestVoted($payload)
+    {
+        // Trigger refresh of the component to update the table
+        Flux::toast("Guest {$payload['guestId']} voted {$payload['point']}");
+    }
+
+    public function hasGuestVoted($guestId): bool
+    {
+        // TODO optimise this to avoid n+1
+        return $this->room->round()->votes()->where('participant_key', $guestId)->exists();
+    }
+
+    public function isIdle(): bool
+    {
+        return $this->room->round()?->status == RoundStatus::IDLE;
     }
 
 
     // Fired when the component receives the list of all current guests
     public function here(array $guests)
     {
-        Flux::toast('Your changes have been saved.');
         $this->participants = collect($guests)
             ->reject(fn($u) => $u['admin'] ?? false)
             ->values()
             ->toArray();
+
+        Flux::toast('Participants loaded');
+
     }
 
     // Fired when a new guest joins
     public function joining(array $guest)
     {
+        if ($guest['admin'] ?? false) {
+            return;
+        }
         $this->participants[] = $guest;
     }
 
@@ -66,9 +90,20 @@ new class extends Component {
                             ])>{{ $p['name'] }}</flux:table.cell>
 
                 <flux:table.cell>
-                    <flux:badge color="red" size="sm" inset="top bottom">
-                        Waiting
-                    </flux:badge>
+
+                        @if($this->isIdle())
+                            <flux:badge color="blue" size="sm" inset="top bottom">
+                                Joined
+                            </flux:badge>
+                        @elseif($this->hasGuestVoted($p['id']))
+                            <flux:badge color="green" size="sm" inset="top bottom">
+                                Voted
+                            </flux:badge>
+                        @else
+                            <flux:badge color="red" size="sm" inset="top bottom">
+                                Waiting
+                            </flux:badge>
+                        @endif
                 </flux:table.cell>
 
                 <flux:table.cell variant="strong">

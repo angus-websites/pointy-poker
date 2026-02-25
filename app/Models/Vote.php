@@ -15,5 +15,9 @@ use Illuminate\Support\Carbon;
  */
 class Vote extends Model
 {
-    //
+    protected $fillable = [
+        'round_id',
+        'participant_key',
+        'value',
+    ];
 }

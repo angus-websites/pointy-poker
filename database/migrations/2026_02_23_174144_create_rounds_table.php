@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('rounds', function (Blueprint $table) {
             $table->id();
             $table->foreignId('room_id')->constrained()->cascadeOnDelete();
-            $table->enum('status', ['voting', 'revealed'])->default('voting');
+            $table->enum('status', ['idle', 'voting', 'revealed'])->default('idle');
             $table->timestamps();
         });
     }
