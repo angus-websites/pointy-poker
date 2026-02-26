@@ -52,15 +52,18 @@ new class extends Component {
 ?>
 
 <div>
+    Current Round Status:
+    <flux:badge color="sky">{{ $room->round()->status }}</flux:badge>
+    <br>
     @if($room->round())
-        @if($room->round()->status === RoundStatus::IDLE)
-            <flux:button variant="primary" color="lime" wire:click="beginVoting">Begin Voting</flux:button>
-        @elseif($room->round()->status === RoundStatus::VOTING)
-            <flux:button variant="primary" wire:click="reveal">Reveal</flux:button>
-        @elseif($room->round()->status === RoundStatus::REVEALED)
-            <flux:button variant="primary" wire:click="newRound">Reset</flux:button>
-        @endif
+    @if($room->round()->status === RoundStatus::IDLE)
+        <flux:button variant="primary" color="lime" wire:click="beginVoting">Begin Voting</flux:button>
+    @elseif($room->round()->status === RoundStatus::VOTING)
+        <flux:button variant="primary" wire:click="reveal">Reveal</flux:button>
+    @elseif($room->round()->status === RoundStatus::REVEALED)
+        <flux:button variant="primary" wire:click="newRound">Reset</flux:button>
+    @endif
     @else
-        <flux:callout variant="danger" icon="x-circle" heading="Error, no round found for room"/>
+    <flux:callout variant="danger" icon="x-circle" heading="Error, no round found for room"/>
     @endif
 </div>
