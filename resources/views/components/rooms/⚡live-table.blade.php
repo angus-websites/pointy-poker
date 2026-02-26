@@ -35,7 +35,14 @@ new class extends Component {
 
     public function isIdle(): bool
     {
+        // TODO optimise this to avoid n+1
         return $this->room->round()?->status == RoundStatus::IDLE;
+    }
+
+    public function isReveal(): bool
+    {
+        // TODO optimise this to avoid n+1
+        return $this->room->round()?->status == RoundStatus::REVEALED;
     }
 
 
@@ -57,6 +64,12 @@ new class extends Component {
         if ($guest['admin'] ?? false) {
             return;
         }
+
+        // Check if guest already exists to avoid duplicates (can happen when refreshing the page)
+        if (collect($this->participants)->pluck('id')->contains($guest['id'])) {
+            return;
+        }
+
         $this->participants[] = $guest;
     }
 
@@ -93,21 +106,32 @@ new class extends Component {
 
                         @if($this->isIdle())
                             <flux:badge color="blue" size="sm" inset="top bottom">
-                                Joined
+                                Connected
                             </flux:badge>
                         @elseif($this->hasGuestVoted($p['id']))
                             <flux:badge color="green" size="sm" inset="top bottom">
                                 Voted
                             </flux:badge>
-                        @else
+                        @elseif($this->isReveal())
                             <flux:badge color="red" size="sm" inset="top bottom">
+                                No vote
+                            </flux:badge>
+                        @else
+                            <flux:badge color="amber" size="sm" inset="top bottom">
                                 Waiting
                             </flux:badge>
                         @endif
                 </flux:table.cell>
 
                 <flux:table.cell variant="strong">
-                    <flux:text class="text-xs">Hidden</flux:text>
+                    @if($this->isReveal())
+                        {{--TODO wtf is this --}}
+                        <flux:text>
+                            {{ $this->room->round()->votes()->where('participant_key', $p['id'])->value('value') ?? 'N/A' }}
+                        </flux:text>
+                    @else
+                        <flux:text class="text-xs">Hidden</flux:text>
+                    @endif
                 </flux:table.cell>
             </flux:table.row>
         @endforeach

@@ -8,7 +8,7 @@
             </flux:heading>
         </div>
         <div>
-            <flux:button variant="primary">Copy Link</flux:button>
+            <flux:button>Copy Link</flux:button>
         </div>
     </div>
     <flux:separator variant="subtle"/>

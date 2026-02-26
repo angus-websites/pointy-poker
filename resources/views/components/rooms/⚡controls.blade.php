@@ -54,7 +54,7 @@ new class extends Component {
 <div>
     @if($room->round())
         @if($room->round()->status === RoundStatus::IDLE)
-            <flux:button variant="primary" wire:click="beginVoting">Begin Voting</flux:button>
+            <flux:button variant="primary" color="lime" wire:click="beginVoting">Begin Voting</flux:button>
         @elseif($room->round()->status === RoundStatus::VOTING)
             <flux:button variant="primary" wire:click="reveal">Reveal</flux:button>
         @elseif($room->round()->status === RoundStatus::REVEALED)

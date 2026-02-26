@@ -50,37 +50,78 @@ new class extends Component {
         Flux::toast('You voted ' . $point . ' points' . ' guest id: ' . $this->guestId);
 
     }
+
+    public function shouldEnable(): bool
+    {
+
+        // TODO cache this to avoid n+1 queries
+        $round = $this->room->round();
+        return $round && $round->status == \App\Enum\RoundStatus::VOTING;
+    }
 };
 ?>
 
 <div class="grid grid-cols-3 md:grid-cols-5 gap-4">
-    @foreach(['1', '2', '3', '5', '8', '13', '20'] as $point)
-        <flux:card
-            wire:click="vote('{{ $point }}')"
-            size="sm"
-            @class([
-                'hover:cursor-pointer border' => true,
 
-                // Selected state
-                'border-lime-600 dark:border-lime-300 bg-lime-600 dark:bg-lime-900/40' => $currentVote === $point,
-
-                // Default state
-                'border-transparent hover:bg-zinc-50 dark:hover:bg-zinc-700 ' => $currentVote !== $point,
-            ])
-        >
-            <flux:text
+    @if($this->shouldEnable())
+        @foreach(['1', '2', '3', '5', '8', '13', '20'] as $point)
+            <flux:card
+                wire:click="vote('{{ $point }}')"
+                size="sm"
                 @class([
-                 'mt-2 text-center' => true,
+                    'hover:cursor-pointer border' => true,
 
-                 // Selected state
-                 'text-white' => $currentVote === $point,
+                    // Selected state
+                    'border-lime-600 dark:border-lime-300 bg-lime-600 dark:bg-lime-700' => $currentVote === $point,
 
-                 // Default state
-                 '' => $currentVote !== $point,
-             ])
+                    // Default state
+                    'border-transparent hover:bg-zinc-50 dark:hover:bg-zinc-700 ' => $currentVote !== $point,
+                ])
             >
-                {{ $point }}
-            </flux:text>
-        </flux:card>
-    @endforeach
+                <flux:text
+                    @class([
+                     'mt-2 text-center' => true,
+
+                     // Selected state
+                     'text-white' => $currentVote === $point,
+
+                     // Default state
+                     '' => $currentVote !== $point,
+                 ])
+                >
+                    {{ $point }}
+                </flux:text>
+            </flux:card>
+        @endforeach
+    @else
+        @foreach(['1', '2', '3', '5', '8', '13', '20'] as $point)
+            <flux:card
+                size="sm"
+                @class([
+                    'hover:cursor-not-allowed opacity-50' => true,
+
+                    // Selected state
+                    'border-lime-600 dark:border-lime-300 bg-lime-600 dark:bg-lime-700' => $currentVote === $point,
+
+                    // Default state
+                    'border-transparent' => $currentVote !== $point,
+                ])
+            >
+                <flux:text
+                    @class([
+                     'mt-2 text-center' => true,
+
+                     // Selected state
+                     'text-white' => $currentVote === $point,
+
+                     // Default state
+                     '' => $currentVote !== $point,
+                 ])
+                >
+                    {{ $point }}
+                </flux:text>
+            </flux:card>
+        @endforeach
+
+    @endif
 </div>
