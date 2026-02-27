@@ -22,10 +22,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
-        // Create 3 rooms for Bob
+        // Create A room
         Room::factory()
             ->forOwner($user)
-            ->count(3)
+            ->state(
+                ['name' => 'Backlog refinement']
+            )
             ->create();
     }
 }
