@@ -48,22 +48,42 @@ new class extends Component {
         ]);
 
     }
+
+    public function hasParticipants(): bool
+    {
+        return $this->room->participants()->exists();
+    }
 };
 ?>
 
-<div>
-    Current Round Status:
-    <flux:badge color="sky">{{ $room->round()->status }}</flux:badge>
-    <br>
-    @if($room->round())
-    @if($room->round()->status === RoundStatus::IDLE)
-        <flux:button variant="primary" color="lime" wire:click="beginVoting">Begin Voting</flux:button>
-    @elseif($room->round()->status === RoundStatus::VOTING)
-        <flux:button variant="primary" wire:click="reveal">Reveal</flux:button>
-    @elseif($room->round()->status === RoundStatus::REVEALED)
-        <flux:button variant="primary" wire:click="newRound">Reset</flux:button>
-    @endif
-    @else
-    <flux:callout variant="danger" icon="x-circle" heading="Error, no round found for room"/>
-    @endif
+<div class="mb-10 flex flex-col gap-y-5 md:flex-row md:items-end md:justify-between">
+    <div>
+        <flux:heading size="lg" level="2">
+            {{ match ($room->round()->status) {
+                RoundStatus::IDLE => 'Waiting to start',
+                RoundStatus::VOTING => 'Voting in progress',
+                RoundStatus::REVEALED => 'Showing results',
+            } }}
+        </flux:heading>
+        <flux:text class="mt-1">
+            {{ match ($room->round()->status) {
+                RoundStatus::IDLE => 'Click "Begin voting" to start the round and allow users to submit their estimates.',
+                RoundStatus::VOTING => 'When all users have submitted their estimates, click "Reveal" to show the results.',
+                RoundStatus::REVEALED => 'Click "Reset" to clear estimates and start a new round.',
+            } }}
+        </flux:text>
+    </div>
+    <div>
+        @switch($room->round()->status)
+            @case(RoundStatus::IDLE)
+                <flux:button variant="primary" color="lime" wire:click="beginVoting">Begin Voting</flux:button>
+                @break
+            @case(RoundStatus::VOTING)
+                <flux:button variant="primary" wire:click="reveal">Reveal</flux:button>
+                @break
+            @case(RoundStatus::REVEALED)
+                <flux:button variant="primary" wire:click="newRound">Reset</flux:button>
+                @break
+        @endswitch
+    </div>
 </div>
