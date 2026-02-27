@@ -37,15 +37,6 @@ class RoomRepository implements RoomRepositoryInterface
         return Room::where('slug', $slug)->first();
     }
 
-    /**
-     * Find a participant by their token.
-     */
-    public function findParticipantByToken(int $room_id, string $token): ?Participant
-    {
-        return Participant::where('room_id', $room_id)
-            ->where('token', $token)
-            ->first();
-    }
 
     /**
      * Create a new room for a user.

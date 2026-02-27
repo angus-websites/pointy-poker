@@ -2,7 +2,6 @@
 
 namespace App\Contracts;
 
-use App\Models\Participant;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Support\Collection;
@@ -24,10 +23,6 @@ interface RoomRepositoryInterface
      */
     public function findBySlug(string $slug): ?Room;
 
-    /**
-     * Find a participant by their token.
-     */
-    public function findParticipantByToken(int $room_id, string $token): ?Participant;
 
     /**
      * Create a new room for a user.

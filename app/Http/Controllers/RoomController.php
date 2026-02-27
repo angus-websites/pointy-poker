@@ -28,15 +28,26 @@ class RoomController extends Controller
             return view('app.rooms.show', compact('room'));
         }
 
-        // Check for a guest cookie
-        $cookie = request()->cookie('pokey_guest');
+        // Check for a participant cookie
+        $cookie = request()->cookie('pokey_participant_'.$room->id);
 
         if ($cookie) {
 
             // Decrypt and decode cookie content
-            $guestData = json_decode(decrypt($cookie), true);
+            $participantData = json_decode(decrypt($cookie), true);
 
-            return view('public.rooms.show', compact('room', 'guestData'));
+            // Check if the token matches a participant in this room
+            $participant = $room->participants()
+                ->where('token', $participantData['token'])
+                ->first();
+
+            if (! $participant) {
+                // Delete the invalid cookie
+                cookie()->queue(cookie()->forget('pokey_participant_'.$room->id));
+            }
+
+            // Otherwise show the room view with participant data
+            return view('public.rooms.show', compact('room', 'participant'));
 
         }
 

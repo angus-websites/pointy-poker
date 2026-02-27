@@ -1,91 +1,26 @@
 <?php
 
-use App\Enum\RoundStatus;
+use App\Models\Participant;
 use App\Models\Room;
-use Flux\Flux;
+use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 new class extends Component {
     public Room $room;
-    public array $participants = [];
-    public ?string $participantId = null;
+    public ?Participant $currentParticipant = null;
 
 
-    public function getListeners()
+    #[Computed]
+    public function participants(): Collection
     {
-        return [
-            "echo-presence:rooms.{$this->room->id},here" => 'here',
-            "echo-presence:rooms.{$this->room->id},joining" => 'joining',
-            "echo-presence:rooms.{$this->room->id},leaving" => 'leaving',
-            "echo:rooms.{$this->room->id},.guestVoted" => 'handleGuestVoted',
-        ];
-    }
-
-    public function handleGuestVoted($payload)
-    {
-        // Trigger refresh of the component to update the table
-        Flux::toast("Guest {$payload['guestId']} voted {$payload['point']}");
-    }
-
-    public function hasGuestVoted($guestId): bool
-    {
-        // TODO optimise this to avoid n+1
-        return $this->room->round()->votes()->where('participant_key', $guestId)->exists();
-    }
-
-    public function isIdle(): bool
-    {
-        // TODO optimise this to avoid n+1
-        return $this->room->round()?->status == RoundStatus::IDLE;
-    }
-
-    public function isReveal(): bool
-    {
-        // TODO optimise this to avoid n+1
-        return $this->room->round()?->status == RoundStatus::REVEALED;
-    }
-
-
-    // Fired when the component receives the list of all current guests
-    public function here(array $guests)
-    {
-        $this->participants = collect($guests)
-            ->reject(fn($u) => $u['admin'] ?? false)
-            ->values()
-            ->toArray();
-
-        Flux::toast('Participants loaded');
-
-    }
-
-    // Fired when a new guest joins
-    public function joining(array $guest)
-    {
-        if ($guest['admin'] ?? false) {
-            return;
-        }
-
-        // Check if guest already exists to avoid duplicates (can happen when refreshing the page)
-        if (collect($this->participants)->pluck('id')->contains($guest['id'])) {
-            return;
-        }
-
-        $this->participants[] = $guest;
-    }
-
-    // Fired when a guest leaves
-    public function leaving(array $guest)
-    {
-        $this->participants = collect($this->participants)
-            ->reject(fn($p) => $p['id'] === $guest['id'])
-            ->values()
-            ->toArray();
+        return $this->room->participants()->get();
     }
 };
 ?>
 
 <div>
-    @empty($participants)
+    @if($this->participants->isEmpty())
         <div class="text-center my-5">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" aria-hidden="true"
                  class="mx-auto size-12 text-gray-400 dark:text-gray-500">
@@ -109,51 +44,30 @@ new class extends Component {
             </flux:table.columns>
 
             <flux:table.rows>
-                @foreach($participants as $p)
+                @foreach($this->participants as $p)
                     <flux:table.row
                         @class([
-                            'bg-zinc-200/50 dark:bg-zinc-700/50' => isset($participantId) && $p['id'] === $participantId
+                            'bg-zinc-200/50 dark:bg-zinc-700/50' => isset($currentParticipant) && $p->id === $currentParticipant->id
                         ])
                     >
                         <flux:table.cell @class([
-                                'font-bold' =>  isset($participantId) && $p['id'] === $participantId
+                                'font-bold' =>  isset($currentParticipant) && $p->id === $currentParticipant->id
                             ])>{{ $p['name'] }}</flux:table.cell>
 
                         <flux:table.cell>
 
-                            @if($this->isIdle())
-                                <flux:badge color="blue" size="sm" inset="top bottom">
-                                    Connected
-                                </flux:badge>
-                            @elseif($this->hasGuestVoted($p['id']))
-                                <flux:badge color="green" size="sm" inset="top bottom">
-                                    Voted
-                                </flux:badge>
-                            @elseif($this->isReveal())
-                                <flux:badge color="red" size="sm" inset="top bottom">
-                                    No vote
-                                </flux:badge>
-                            @else
-                                <flux:badge color="amber" size="sm" inset="top bottom">
-                                    Waiting
-                                </flux:badge>
-                            @endif
+                            <flux:badge color="amber" size="sm" inset="top bottom">
+                                Dunno
+                            </flux:badge>
                         </flux:table.cell>
 
                         <flux:table.cell variant="strong">
-                            @if($this->isReveal())
-                                {{--TODO wtf is this --}}
-                                <flux:text>
-                                    {{ $this->room->round()->votes()->where('participant_key', $p['id'])->value('value') ?? 'N/A' }}
-                                </flux:text>
-                            @else
-                                <flux:text class="text-xs">Hidden</flux:text>
-                            @endif
+                            <flux:text class="text-xs">Hidden</flux:text>
                         </flux:table.cell>
                     </flux:table.row>
                 @endforeach
             </flux:table.rows>
         </flux:table>
-    @endempty
+    @endif
 </div>
 

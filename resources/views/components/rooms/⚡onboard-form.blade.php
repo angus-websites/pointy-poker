@@ -21,13 +21,23 @@ new class extends Component {
         // Validate input
         $this->validate();
 
+        // Generate token
+        $token = (string)Str::uuid();
+
+        // Create participant
+        Participant::create([
+            'room_id' => $this->room->id,
+            'name' => $this->name,
+            'token' => $token,
+        ]);
+
         // Create a cookie with guest info
+        //TODO move to service
         cookie()->queue(
             cookie(
-                'pokey_guest',
+                'pokey_participant_' . $this->room->id,
                 encrypt(json_encode([
-                    'id' => (string)Str::uuid(),
-                    'name' => $this->name,
+                    'token' => $token,
                 ])),
                 60 * 24 * 365 // 1 year
             )

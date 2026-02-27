@@ -51,7 +51,7 @@ new class extends Component {
 
     public function hasParticipants(): bool
     {
-        return $this->room->participants()->exists();
+        return $this->room->participants()->count() > 0;
     }
 };
 ?>
@@ -82,7 +82,7 @@ new class extends Component {
                 <flux:button variant="primary" wire:click="reveal">Reveal</flux:button>
                 @break
             @case(RoundStatus::REVEALED)
-                <flux:button variant="primary" wire:click="newRound">Reset</flux:button>
+                <flux:button variant="primary" color="amber" wire:click="newRound">Reset</flux:button>
                 @break
         @endswitch
     </div>

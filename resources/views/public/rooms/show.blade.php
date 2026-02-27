@@ -5,7 +5,7 @@
                 {{$room->name}}
             </flux:heading>
             <flux:text class="mt-2 text-lg">
-                Your name: {{ $guestData["name"] }}
+                Your name: {{ $participant->name }}
             </flux:text>
         </div>
         <flux:separator variant="subtle"/>
@@ -15,7 +15,7 @@
             <flux:heading size="lg" level="2" class="mb-5">
                 Estimate
             </flux:heading>
-            <livewire:rooms.voting :room="$room" :guestId="$guestData['id']" />
+            <livewire:rooms.voting :room="$room" :participant="$participant" />
         </section>
 
         {{-- Results --}}
@@ -23,7 +23,7 @@
             <flux:heading size="lg" level="2" class="mb-5">
                 Results
             </flux:heading>
-            <livewire:rooms.live-table :room="$room" :participantId="$guestData['id']"/>
+            <livewire:rooms.live-table :room="$room" :participant="$participant"/>
         </section>
     </x-page-container>
 </x-layouts::public>

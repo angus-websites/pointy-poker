@@ -20,13 +20,13 @@ class Room extends Model
 {
     /** @use HasFactory<RoomFactory> */
     use HasFactory;
+
     protected $fillable = ['name', 'owner_id', 'slug'];
 
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
-
 
     /**
      * Get the rounds for the room.
@@ -43,5 +43,13 @@ class Room extends Model
     {
         return $this->rounds()->latest()->first();
 
+    }
+
+    /**
+     * Get the participants for the room.
+     */
+    public function participants(): HasMany
+    {
+        return $this->hasMany(Participant::class);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\GuestVoted;
+use App\Models\Participant;
 use App\Models\Room;
 use App\Models\Vote;
 use Flux\Flux;
@@ -8,15 +8,15 @@ use Livewire\Component;
 
 new class extends Component {
     public Room $room;
-    public string $guestId;
+    public Participant $participant;
     public string $currentVote = '';
 
     public function mount()
     {
-        // Fetch current vote is exists
+        // Fetch current vote if exists
         $round = $this->room->round();
         if ($round) {
-            $vote = $round->votes()->where('participant_key', $this->guestId)->first();
+            $vote = $round->votes()->where('participant_id', $this->participant->id)->first();
             $this->currentVote = $vote ? $vote->value : '';
         }
     }
@@ -35,7 +35,7 @@ new class extends Component {
         Vote::updateOrCreate(
             [
                 'round_id' => $round->id,
-                'participant_key' => $this->guestId,
+                'participant_id' => $this->participant->id,
             ],
             [
                 'value' => $point,
@@ -43,11 +43,7 @@ new class extends Component {
         );
 
         $this->currentVote = $point;
-
-        // Dispatch event to other participants
-        event(new GuestVoted($this->room->id, $this->guestId, $point));
-
-        Flux::toast('You voted ' . $point . ' points' . ' guest id: ' . $this->guestId);
+        Flux::toast('You voted');
 
     }
 
