@@ -1,6 +1,5 @@
 <x-layouts::app :title="__('Room')">
 
-
     {{-- Top Bar --}}
     <div class="flex flex-col gap-y-5 md:flex-row md:items-end md:justify-between mb-6">
         <div>
@@ -26,7 +25,7 @@
                         <h2 id="user-table-section-title" class="sr-only">Users Table</h2>
                         <div
                             class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-white/10 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
-                            <div class="p-6">
+                            <div class="p-6 grid grid-cols-1 gap-y-10">
 
                                 {{-- Control bar --}}
                                 <livewire:rooms.controls :room="$room"/>
