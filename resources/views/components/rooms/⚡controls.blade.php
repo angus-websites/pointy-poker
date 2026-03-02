@@ -9,6 +9,7 @@ new class extends Component {
     #[Reactive]
     public RoundStatus $status;
 
+    #[Reactive]
     public bool $hasParticipants = false;
 
 
@@ -49,6 +50,13 @@ new class extends Component {
 
 @php
     $meta = $this->statusMeta;
+
+    // Determine if the button should render
+    $showButton = true;
+
+    if ($this->status === RoundStatus::IDLE && !$this->hasParticipants) {
+        $showButton = false;
+    }
 @endphp
 
 <div class="flex flex-col gap-y-5 md:flex-row md:items-end md:justify-between">
@@ -61,13 +69,14 @@ new class extends Component {
     </div>
 
     <div>
-        <flux:button
-            variant="primary"
-            color="{{ $meta['button']['color'] }}"
-            wire:click="$dispatch('{{ $meta['button']['event'] }}')"
-            :disabled="(!$hasParticipants)"
-        >
-            {{ $meta['button']['label'] }}
-        </flux:button>
+        @if($showButton)
+            <flux:button
+                variant="primary"
+                color="{{ $meta['button']['color'] }}"
+                wire:click="$dispatch('{{ $meta['button']['event'] }}')"
+            >
+                {{ $meta['button']['label'] }}
+            </flux:button>
+        @endif
     </div>
 </div>
