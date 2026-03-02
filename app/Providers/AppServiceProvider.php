@@ -2,14 +2,14 @@
 
 namespace App\Providers;
 
-use App\Contracts\ParticipantRepositoryInterface;
-use App\Contracts\RoomRepositoryInterface;
-use App\Contracts\RoundRepositoryInterface;
-use App\Contracts\VoteRepositoryInterface;
-use App\Repositories\EloquentParticipantRepository;
-use App\Repositories\EloquentRoomRepository;
-use App\Repositories\EloquentRoundRepository;
-use App\Repositories\EloquentVoteRepository;
+use App\Contracts\Repository\ParticipantRepositoryInterface;
+use App\Contracts\Repository\RoomRepositoryInterface;
+use App\Contracts\Repository\RoundRepositoryInterface;
+use App\Contracts\Repository\VoteRepositoryInterface;
+use App\Repositories\Eloquent\EloquentParticipantRepository;
+use App\Repositories\Eloquent\EloquentRoomRepository;
+use App\Repositories\Eloquent\EloquentRoundRepository;
+use App\Repositories\Eloquent\EloquentVoteRepository;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;

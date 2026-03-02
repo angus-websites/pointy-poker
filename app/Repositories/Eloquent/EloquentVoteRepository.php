@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Eloquent;
 
-use App\Contracts\VoteRepositoryInterface;
+use App\Contracts\Repository\VoteRepositoryInterface;
 use App\Models\Participant;
 use App\Models\Round;
 use App\Models\Vote;

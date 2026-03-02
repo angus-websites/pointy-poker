@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts;
+namespace App\Contracts\Repository;
 
 use App\Models\Participant;
 use App\Models\Room;

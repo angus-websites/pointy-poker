@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Contracts\RoomRepositoryInterface;
+use App\Contracts\Repository\RoomRepositoryInterface;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

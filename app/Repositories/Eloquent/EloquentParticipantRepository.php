@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Eloquent;
 
-use App\Contracts\ParticipantRepositoryInterface;
+use App\Contracts\Repository\ParticipantRepositoryInterface;
 use App\Models\Participant;
 use App\Models\Room;
 use Illuminate\Support\Collection;

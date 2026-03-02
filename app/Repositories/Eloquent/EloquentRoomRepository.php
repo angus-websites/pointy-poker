@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Eloquent;
 
-use App\Contracts\RoomRepositoryInterface;
+use App\Contracts\Repository\RoomRepositoryInterface;
 use App\Enum\RoundStatus;
 use App\Models\Room;
 use App\Models\User;
