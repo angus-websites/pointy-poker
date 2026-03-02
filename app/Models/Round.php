@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Contracts\Model\RoundContract;
+use App\Contracts\Model\VoteContract;
 use App\Enum\RoundStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 /**
  * A Round represents a single round of voting in a Room. It belongs to a Room and has many Votes.
@@ -13,7 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $room_id
  * @property RoundStatus $status
  */
-class Round extends Model
+class Round extends Model implements RoundContract
 {
     protected $casts = [
         'status' => RoundStatus::class,
@@ -27,5 +30,67 @@ class Round extends Model
     public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
+    }
+
+    /** ---------------- Contract Methods ---------------- */
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getStatus(): RoundStatus
+    {
+        return $this->status;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setStatus(RoundStatus $status): void
+    {
+        $this->status = $status;
+        $this->save();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getVotes(): Collection
+    {
+        return $this->votes()->get();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getVote(int $participantId): ?VoteContract
+    {
+        return $this->votes()->where('participant_id', $participantId)->first();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function castVote(VoteContract $vote): void
+    {
+        $existingVote = $this->getVote($vote->getParticipantId());
+
+        if ($existingVote) {
+            // Update existing vote
+            $existingVote->setValue($vote->getValue());
+        } else {
+            // Create new vote
+            $this->votes()->create([
+                'participant_id' => $vote->getParticipantId(),
+                'value' => $vote->getValue(),
+            ]);
+        }
     }
 }

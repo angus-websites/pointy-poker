@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Contracts\Model\ParticipantContract;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -15,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $token
  * @property Carbon|null $last_seen_at
  */
-class Participant extends Model
+class Participant extends Model implements ParticipantContract
 {
     protected $fillable = [
         'room_id',
@@ -31,5 +33,40 @@ class Participant extends Model
     public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
+    }
+
+    /** ---------------- Contract Methods ---------------- */
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLastSeenAt(): ?CarbonInterface
+    {
+        return $this->last_seen_at;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function touch(): void
+    {
+        $this->last_seen_at = Carbon::now();
+        $this->save();
     }
 }

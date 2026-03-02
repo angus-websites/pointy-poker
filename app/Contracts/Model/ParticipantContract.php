@@ -1,7 +1,7 @@
 <?php
 namespace App\Contracts\Model;
 
-use Illuminate\Support\Collection;
+use Carbon\CarbonInterface;
 
 interface ParticipantContract
 {
@@ -18,17 +18,11 @@ interface ParticipantContract
     /**
      * Get the last seen timestamp (for live/active participants).
      */
-    public function getLastSeenAt(): ?\DateTimeImmutable;
+    public function getLastSeenAt(): ?CarbonInterface;
 
     /**
      * Update the last seen timestamp to now.
      */
     public function touch(): void;
 
-    /**
-     * Get votes cast by this participant.
-     *
-     * @return Collection<int, VoteContract>
-     */
-    public function getVotes(): Collection;
 }
