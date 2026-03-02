@@ -10,11 +10,17 @@ use Illuminate\Support\Collection;
 
 class EloquentVoteRepository implements VoteRepositoryInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function getForRound(Round $round): Collection
     {
         return $round->votes()->get();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getForParticipant(Round $round, Participant $participant): ?Vote
     {
         return $round->votes()
@@ -22,6 +28,9 @@ class EloquentVoteRepository implements VoteRepositoryInterface
             ->first();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function cast(Round $round, Participant $participant, string $value): Vote
     {
         return Vote::updateOrCreate(

@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 class EloquentRoomRepository implements RoomRepositoryInterface
 {
     /**
-     * Get all rooms owned by a user.
+     * {@inheritDoc}
      */
     public function getByOwner(User $user): Collection
     {
@@ -22,7 +22,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     }
 
     /**
-     * Find room by ID.
+     * {@inheritDoc}
      */
     public function findById(int $id): ?Room
     {
@@ -30,7 +30,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     }
 
     /**
-     * Find room by slug.
+     * {@inheritDoc}
      */
     public function findBySlug(string $slug): ?Room
     {
@@ -38,7 +38,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     }
 
     /**
-     * Create a new room for a user.
+     * {@inheritDoc}
      */
     public function create(User $owner, array $data = []): Room
     {
@@ -57,7 +57,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     }
 
     /**
-     * Delete a room.
+     * {@inheritDoc}
      */
     public function delete(Room $room): bool
     {
@@ -65,7 +65,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     }
 
     /**
-     * Generate a unique slug.
+     * Generate a unique slug for the room.
      */
     protected function generateUniqueSlug(): string
     {

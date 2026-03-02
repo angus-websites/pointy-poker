@@ -9,6 +9,9 @@ use App\Models\Round;
 
 class EloquentRoundRepository implements RoundRepositoryInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function getCurrentForRoom(Room $room): ?Round
     {
         return $room->rounds()
@@ -16,6 +19,9 @@ class EloquentRoundRepository implements RoundRepositoryInterface
             ->first();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function createForRoom(Room $room, RoundStatus $status): Round
     {
         return $room->rounds()->create([
@@ -23,6 +29,9 @@ class EloquentRoundRepository implements RoundRepositoryInterface
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function updateStatus(Round $round, RoundStatus $status): void
     {
         $round->update([
@@ -30,6 +39,9 @@ class EloquentRoundRepository implements RoundRepositoryInterface
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function delete(Round $round): void
     {
         $round->delete();
