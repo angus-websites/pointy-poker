@@ -21,8 +21,7 @@
 
                     <!-- Main -->
                     <div class="col-span-full">
-                        <section aria-labelledby="user-table-section-title">
-                            <h2 id="user-table-section-title" class="sr-only">Users Table</h2>
+                        <section>
                             <div
                                 class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-white/10 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
                                 <div class="p-6 grid grid-cols-1 gap-y-10">

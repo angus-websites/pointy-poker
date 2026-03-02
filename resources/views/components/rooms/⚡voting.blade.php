@@ -12,7 +12,6 @@ new class extends Component {
     public Participant $participant;
 
     public string $currentVote = '';
-    public bool $canVote = false;
 
 
     protected array $points = ['1', '2', '3', '5', '8', '13', '20'];
@@ -25,11 +24,15 @@ new class extends Component {
             $vote = $round->votes()->where('participant_id', $this->participant->id)->first();
             $this->currentVote = $vote ? $vote->value : '';
 
-            // Enable voting if round is in VOTING status
-            $this->canVote = $round->status == RoundStatus::VOTING;
         }
 
 
+    }
+
+    public function canVote(): bool
+    {
+        $round = $this->room->round();
+        return $round && $round->status == RoundStatus::VOTING;
     }
 
 
@@ -37,7 +40,7 @@ new class extends Component {
     public function vote($point)
     {
         // Prevent voting if not allowed
-        if (!$this->canVote) {
+        if (!$this->canVote()) {
             Flux::toast('Voting is not currently enabled', 'error');
             return;
         }
@@ -77,13 +80,13 @@ new class extends Component {
                 @voted="vote($event.detail.point)"
                 :point="$point"
                 :selected="$currentVote === $point"
-                :enabled="$canVote"/>
+                :enabled="$this->canVote()"/>
 
         @endforeach
 
     </div>
 
-    @unless($this->canVote)
+    @unless($this->canVote())
         <div class="mt-5">
             <flux:text variant="subtle">
                 Voting is currently disabled

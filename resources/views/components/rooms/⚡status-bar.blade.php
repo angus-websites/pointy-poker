@@ -1,10 +1,12 @@
 <?php
 
 use App\Enum\RoundStatus;
+use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
 new class extends Component {
 
+    #[Reactive]
     public RoundStatus $status;
 
 
