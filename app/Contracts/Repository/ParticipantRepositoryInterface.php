@@ -18,4 +18,9 @@ interface ParticipantRepositoryInterface
      * A heartbeat method to update the last active timestamp of a participant.
      */
     public function touch(Participant $participant): void;
+
+    /**
+     * Add a new participant to a room.
+     */
+    public function addToRoom(Room $room, string $name, string $token): Participant;
 }
