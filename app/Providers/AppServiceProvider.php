@@ -2,15 +2,17 @@
 
 namespace App\Providers;
 
+use App\Contracts\ParticipantRepositoryInterface;
 use App\Contracts\RoomRepositoryInterface;
-use App\Models\User;
-use App\Repositories\RoomRepository;
+use App\Contracts\RoundRepositoryInterface;
+use App\Contracts\VoteRepositoryInterface;
+use App\Repositories\EloquentParticipantRepository;
+use App\Repositories\EloquentRoomRepository;
+use App\Repositories\EloquentRoundRepository;
+use App\Repositories\EloquentVoteRepository;
 use Carbon\CarbonImmutable;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -21,9 +23,29 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+
+        // Room repository binding
         $this->app->bind(
             RoomRepositoryInterface::class,
-            RoomRepository::class
+            EloquentRoomRepository::class
+        );
+
+        // Round repository binding
+        $this->app->bind(
+            RoundRepositoryInterface::class,
+            EloquentRoundRepository::class
+        );
+
+        // Participant repository binding
+        $this->app->bind(
+            ParticipantRepositoryInterface::class,
+            EloquentParticipantRepository::class
+        );
+
+        // Vote repository binding
+        $this->app->bind(
+            VoteRepositoryInterface::class,
+            EloquentVoteRepository::class
         );
     }
 
@@ -33,29 +55,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
-
-        // Guest Cookie guard
-        Auth::viaRequest('guest-cookie', function (Request $request) {
-
-            // If user is already authenticated, return the user
-            if (Auth::hasUser()) {
-                return Auth::user();
-            }
-
-            // Check for guest cookie and log in as guest user if it exists
-            $cookie = $request->cookie('pokey_guest');
-
-            if ($cookie) {
-                Log::info('Logging in guest user from cookie', ['cookie' => $cookie]);
-                $guest = json_decode(decrypt($cookie), true);
-                return User::factory()->make([
-                    'id' => $guest['id'],
-                    'name' => $guest['name'],
-                ]);
-            }
-
-            return null;
-        });
     }
 
     protected function configureDefaults(): void

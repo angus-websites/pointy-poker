@@ -3,13 +3,13 @@
 namespace App\Repositories;
 
 use App\Contracts\RoomRepositoryInterface;
-use App\Models\Participant;
+use App\Enum\RoundStatus;
 use App\Models\Room;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
-class RoomRepository implements RoomRepositoryInterface
+class EloquentRoomRepository implements RoomRepositoryInterface
 {
     /**
      * Get all rooms owned by a user.
@@ -37,17 +37,23 @@ class RoomRepository implements RoomRepositoryInterface
         return Room::where('slug', $slug)->first();
     }
 
-
     /**
      * Create a new room for a user.
      */
     public function create(User $owner, array $data = []): Room
     {
-        return Room::create([
+        $room = Room::create([
             'owner_id' => $owner->id,
             'name' => $data['name'] ?? null,
             'slug' => $this->generateUniqueSlug(),
         ]);
+
+        // Create an intial round for the room
+        $room->rounds()->create([
+            'status' => RoundStatus::IDLE,
+        ]);
+
+        return $room;
     }
 
     /**
