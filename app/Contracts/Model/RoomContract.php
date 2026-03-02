@@ -42,6 +42,11 @@ interface RoomContract
     public function getParticipant(int $participantId): ?ParticipantContract;
 
     /**
+     * Add a participant to the room.
+     */
+    public function addParticipant(ParticipantContract $participant): void;
+
+    /**
      * Get all rounds for the room.
      *
      * @return Collection<int, RoundContract>

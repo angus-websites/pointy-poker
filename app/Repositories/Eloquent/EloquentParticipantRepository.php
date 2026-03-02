@@ -2,9 +2,10 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Contracts\Model\ParticipantContract;
+use App\Contracts\Model\RoomContract;
 use App\Contracts\Repository\ParticipantRepositoryInterface;
 use App\Models\Participant;
-use App\Models\Room;
 use Illuminate\Support\Collection;
 
 class EloquentParticipantRepository implements ParticipantRepositoryInterface
@@ -12,11 +13,11 @@ class EloquentParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function getActiveForRoom(Room $room, int $seconds = 10): Collection
+    public function getActiveForRoom(RoomContract $room, int $seconds = 10): Collection
     {
         $cutoff = now()->subSeconds($seconds);
 
-        return $room->participants()
+        return Participant::where('room_id', $room->getId())
             ->where('last_seen_at', '>=', $cutoff)
             ->get();
     }
@@ -24,7 +25,7 @@ class EloquentParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function touch(Participant $participant): void
+    public function touch(ParticipantContract $participant): void
     {
         $participant->update([
             'last_seen_at' => now(),
@@ -34,12 +35,13 @@ class EloquentParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function addToRoom(Room $room, string $name, string $token): Participant
+    public function create(RoomContract $room, string $name, string $token): ParticipantContract
     {
-        return $room->participants()->create([
+        return Participant::create([
+            'room_id' => $room->getId(),
             'name' => $name,
-            'last_seen_at' => now(),
             'token' => $token,
+            'last_seen_at' => now(),
         ]);
     }
 }

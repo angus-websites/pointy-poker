@@ -7,6 +7,7 @@ use App\Contracts\Model\UserContract;
 use App\Contracts\Repository\RoomRepositoryInterface;
 use App\Enum\RoundStatus;
 use App\Models\Room;
+use App\Models\Round;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -17,7 +18,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
      */
     public function getByOwner(UserContract $owner): Collection
     {
-        return Room::where('owner_id', $owner->id)
+        return Room::where('owner_id', $owner->getId())
             ->orderByDesc('created_at')
             ->get();
     }
@@ -44,13 +45,14 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     public function create(UserContract $owner, array $data = []): Room
     {
         $room = Room::create([
-            'owner_id' => $owner->id,
+            'owner_id' => $owner->getId(),
             'name' => $data['name'] ?? null,
             'slug' => $this->generateUniqueSlug(),
         ]);
 
-        // Create an intial round for the room
-        $room->rounds()->create([
+        // Create an initial round for the room
+        Round::create([
+            'room_id' => $room->getId(),
             'status' => RoundStatus::IDLE,
         ]);
 
@@ -62,7 +64,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
      */
     public function delete(RoomContract $room): bool
     {
-        return (bool) $room->delete();
+        return Room::destroy($room->getId());
     }
 
     /**
