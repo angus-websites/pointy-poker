@@ -2,10 +2,11 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Contracts\Model\RoomContract;
+use App\Contracts\Model\UserContract;
 use App\Contracts\Repository\RoomRepositoryInterface;
 use App\Enum\RoundStatus;
 use App\Models\Room;
-use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
@@ -14,9 +15,9 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function getByOwner(User $user): Collection
+    public function getByOwner(UserContract $owner): Collection
     {
-        return Room::where('owner_id', $user->id)
+        return Room::where('owner_id', $owner->id)
             ->orderByDesc('created_at')
             ->get();
     }
@@ -40,7 +41,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function create(User $owner, array $data = []): Room
+    public function create(UserContract $owner, array $data = []): Room
     {
         $room = Room::create([
             'owner_id' => $owner->id,
@@ -59,7 +60,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function delete(Room $room): bool
+    public function delete(RoomContract $room): bool
     {
         return (bool) $room->delete();
     }
