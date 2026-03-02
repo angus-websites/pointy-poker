@@ -71,8 +71,7 @@ new class extends Component {
         if (!$round) {
             // Create a round if it doesn't exist
             $this->newRound();
-            $this->syncFromDatabase();
-
+            return;
         }
 
         $this->status = $round->status;
