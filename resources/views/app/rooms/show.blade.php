@@ -40,18 +40,18 @@
                                     Points Explained
                                 </flux:heading>
                                     <ul role="list" class="divide-y divide-gray-200 dark:divide-white/10">
-                                        @foreach(['1', '2', '3', '5', '8', '13', '20'] as $point)
+                                        @foreach(['1', '2', '3', '5', '8', '13', '21'] as $point)
                                         <li class="py-4 sm:px-0 text-left lg:text-center">
                                             <flux:heading size="xl" class=" font-mono">{{ $point }}</flux:heading>
                                             <flux:text class="mt-2">
                                                 {{ match ($point) {
-                                                    '1' => 'About an hour',
-                                                    '2' => 'About half a day',
-                                                    '3' => 'About a day',
-                                                    '5' => 'About a week',
-                                                    '8' => 'About two weeks',
-                                                    '13' => 'About a month',
-                                                    '20' => 'More than a month',
+                                                    '1' => 'About half a day',
+                                                    '2' => 'About a day',
+                                                    '3' => 'Less than 2 days',
+                                                    '5' => 'Half a week',
+                                                    '8' => 'A week',
+                                                    '13' => '2 Weeks',
+                                                    '21' => 'A month or more',
                                                     default => '',
                                                 } }}
                                             </flux:text>
