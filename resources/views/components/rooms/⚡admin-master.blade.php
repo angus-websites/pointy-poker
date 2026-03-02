@@ -22,7 +22,6 @@ new class extends Component {
 
     public function mount()
     {
-        // TODO create round if not exists
         $this->syncFromDatabase();
     }
 
