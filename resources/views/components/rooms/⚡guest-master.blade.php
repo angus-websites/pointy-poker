@@ -42,6 +42,16 @@ new class extends Component {
 
     public function mount()
     {
+        $this->heartbeat();
+    }
+
+    public function heartbeat(): void
+    {
+        // Update only this participant
+        $this->participant->update([
+            'last_seen_at' => now(),
+        ]);
+
         $this->syncFromDatabase();
     }
 
@@ -61,27 +71,26 @@ new class extends Component {
             ->value('value');
 
         // TODO optimize this by eager loading votes with participants
-        $this->participants = $this->room->participants()->get();
+
+        $cutoff = now()->subSeconds(10);
+        $this->participants = $this->room->participants()
+            ->where('last_seen_at', '>=', $cutoff)
+            ->get();
 
         $this->participantVotes = $round->votes()
             ->pluck('value', 'participant_id')
             ->toArray();
 
     }
-
-    public function refreshStatus(): void
-    {
-        $this->syncFromDatabase();
-    }
 };
 
 
 ?>
 
-<div wire:poll.2s="refreshStatus" class="p-6 grid grid-cols-1 gap-y-10">
+<div wire:poll.2s="heartbeat" class="p-6 grid grid-cols-1 gap-y-10">
 
     {{-- Status bar --}}
-    <livewire:rooms.status-bar :status="$room->round()?->status"/>
+    <livewire:rooms.status-bar :status="$status"/>
 
     {{-- Vote --}}
     <livewire:rooms.voting
@@ -97,4 +106,5 @@ new class extends Component {
         :votes="$participantVotes"
         :status="$status"
     />
+
 </div>

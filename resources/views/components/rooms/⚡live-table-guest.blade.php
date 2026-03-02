@@ -13,6 +13,51 @@ new class extends Component {
     public array $votes = []; // participant_id => value
     #[Reactive]
     public RoundStatus $status;
+
+    protected function badgeMeta(int $participantId): array
+    {
+        $hasVoted = isset($this->votes[$participantId]);
+
+        return match ($this->status) {
+
+            RoundStatus::VOTING => [
+                'text' => $hasVoted ? 'Voted' : 'Waiting',
+                'color' => $hasVoted ? 'lime' : 'amber',
+            ],
+
+            RoundStatus::REVEALED => [
+                'text' => $hasVoted ? 'Voted' : 'Did not vote',
+                'color' => $hasVoted ? 'lime' : 'rose',
+            ],
+
+            RoundStatus::IDLE => [
+                'text' => 'Connected',
+                'color' => 'blue',
+            ],
+        };
+    }
+
+    protected function displayPoints(int $participantId): string
+    {
+        $hasVoted = isset($this->votes[$participantId]);
+        $isCurrent = $participantId === $this->currentParticipantId;
+
+        if ($this->status === RoundStatus::REVEALED) {
+            return $this->votes[$participantId] ?? '-';
+        }
+
+        if ($this->status === RoundStatus::VOTING) {
+
+            // Always show current participant their vote
+            if ($isCurrent) {
+                return $this->votes[$participantId] ?? '-';
+            }
+
+            return $hasVoted ? 'Hidden' : '-';
+        }
+
+        return '-';
+    }
 };
 ?>
 
@@ -26,48 +71,31 @@ new class extends Component {
 
         <flux:table.rows>
             @foreach($participants as $p)
-                <flux:table.row
-                    @class([
-                        'bg-zinc-200/50 dark:bg-zinc-700/50' => isset($currentParticipantId) && $p['id'] === $currentParticipantId
-                    ])
-                >
-                    {{-- Name --}}
-                    <flux:table.cell @class([
-            'font-bold' => isset($currentParticipantId) && $p['id'] === $currentParticipantId
-        ])>{{ $p['name'] }}</flux:table.cell>
 
-                    {{-- Status Badge --}}
+                @php
+                    $badge = $this->badgeMeta($p->id);
+                @endphp
+
+                <flux:table.row>
+
                     <flux:table.cell>
-                        @php
-                            $badgeText = match($this->status) {
-                                RoundStatus::VOTING => isset($votes[$p['id']]) ? 'Voted' : 'Waiting',
-                                RoundStatus::REVEALED, RoundStatus::IDLE => 'Connected',
-                            };
+                        {{ $p->name }}
+                    </flux:table.cell>
 
-                            $badgeColor = match($this->status) {
-                                RoundStatus::VOTING => isset($votes[$p['id']]) ? 'lime' : 'amber',
-                                RoundStatus::REVEALED, RoundStatus::IDLE => 'blue',
-                            };
-                        @endphp
-
-                        <flux:badge color="{{ $badgeColor }}" size="sm" inset="top bottom">
-                            {{ $badgeText }}
+                    <flux:table.cell>
+                        <flux:badge color="{{ $badge['color'] }}" size="sm" inset="top bottom">
+                            {{ $badge['text'] }}
                         </flux:badge>
                     </flux:table.cell>
 
-                    {{-- Points column --}}
                     <flux:table.cell variant="strong">
                         <flux:text class="text-xs">
-                            @if($status === RoundStatus::REVEALED)
-                                {{ $votes[$p['id']] ?? '-' }}
-                            @elseif($status === RoundStatus::VOTING)
-                                Hidden
-                            @else
-                                -
-                            @endif
+                            {{ $this->displayPoints($p->id) }}
                         </flux:text>
                     </flux:table.cell>
+
                 </flux:table.row>
+
             @endforeach
         </flux:table.rows>
     </flux:table>

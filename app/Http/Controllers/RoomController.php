@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\RoomService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class RoomController extends Controller
 {
@@ -19,40 +20,74 @@ class RoomController extends Controller
         return view('app.rooms.index', compact('rooms'));
     }
 
-    public function show(string $slug): Factory|View
+    public function show(string $slug): Factory|View|RedirectResponse
     {
         $room = $this->roomService->getRoomBySlug($slug);
 
-        // If logged-in user is the owner of the room, redirect to app view
+        $ownerCookieName = 'pokey_owner_'.$room->id;
+        $participantCookieName = 'pokey_participant_'.$room->id;
+
+        /*
+        |--------------------------------------------------------------------------
+        | 1. OWNER LOGIC
+        |--------------------------------------------------------------------------
+        */
+
+        // If logged-in owner
         if (auth()->check() && $room->owner_id === auth()->id()) {
+
+            // Store owner cookie for future detection
+            cookie()->queue(
+                cookie($ownerCookieName, encrypt(auth()->id()), 60 * 24 * 30) // 30 days
+            );
+
             return view('app.rooms.show', compact('room'));
         }
 
-        // Check for a participant cookie
-        $cookie = request()->cookie('pokey_participant_'.$room->id);
+        // If owner cookie exists but user is not authenticated → force login
+        if (! auth()->check() && request()->hasCookie($ownerCookieName)) {
 
-        if ($cookie) {
-
-            // Decrypt and decode cookie content
-            $participantData = json_decode(decrypt($cookie), true);
-
-            // Check if the token matches a participant in this room
-            $participant = $room->participants()
-                ->where('token', $participantData['token'])
-                ->first();
-
-            if (! $participant) {
-                // Delete the invalid cookie
-                cookie()->queue(cookie()->forget('pokey_participant_'.$room->id));
-            }
-
-            // Otherwise show the room view with participant data
-            return view('public.rooms.show', compact('room', 'participant'));
+            // Set this route as intended so user is redirected back after login
+            return redirect()->guest(route('login'))
+                ->with('message', 'Please login to access your room.');
 
         }
 
-        // Show the onboarding page for this room
-        return view('public.rooms.onboarding', compact('room'));
+        /*
+        |--------------------------------------------------------------------------
+        | 2. PARTICIPANT LOGIC
+        |--------------------------------------------------------------------------
+        */
 
+        $cookie = request()->cookie($participantCookieName);
+
+        if ($cookie) {
+
+            try {
+                $participantData = json_decode(decrypt($cookie), true);
+
+                $participant = $room->participants()
+                    ->where('token', $participantData['token'] ?? null)
+                    ->first();
+
+                if (! $participant) {
+                    cookie()->queue(cookie()->forget($participantCookieName));
+                } else {
+                    return view('public.rooms.show', compact('room', 'participant'));
+                }
+
+            } catch (\Throwable $e) {
+                // Invalid / tampered cookie
+                cookie()->queue(cookie()->forget($participantCookieName));
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | 3. DEFAULT → ONBOARDING
+        |--------------------------------------------------------------------------
+        */
+
+        return view('public.rooms.onboarding', compact('room'));
     }
 }
