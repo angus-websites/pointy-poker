@@ -24,17 +24,7 @@
                         <section>
                             <div
                                 class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-white/10 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
-                                <div class="p-6 grid grid-cols-1 gap-y-10">
-
-                                    {{-- Status bar --}}
-                                    <livewire:rooms.status-bar :status="$room->round()?->status"/>
-
-                                    {{-- Vote --}}
-                                    <livewire:rooms.voting :room="$room" :participant="$participant"/>
-
-                                    {{-- Live table --}}
-                                    <livewire:rooms.live-table :room="$room"/>
-                                </div>
+                                <livewire:rooms.guest-card :participant="$participant" :room="$room"/>
                             </div>
                         </section>
                     </div>
