@@ -111,17 +111,5 @@ class Room extends Model implements RoomContract
             ->first();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function addRound(RoundContract $round): void
-    {
-        if ($round instanceof Round) {
-            $round->room_id = $this->id;
-            $round->save();
-        } else {
-            throw new \InvalidArgumentException('Round must be an instance of App\Models\Round');
-        }
-    }
 
 }

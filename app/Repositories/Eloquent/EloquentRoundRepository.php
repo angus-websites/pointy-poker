@@ -2,9 +2,10 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Contracts\Model\RoomContract;
+use App\Contracts\Model\RoundContract;
 use App\Contracts\Repository\RoundRepositoryInterface;
 use App\Enum\RoundStatus;
-use App\Models\Room;
 use App\Models\Round;
 
 class EloquentRoundRepository implements RoundRepositoryInterface
@@ -12,19 +13,18 @@ class EloquentRoundRepository implements RoundRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function getCurrentForRoom(Room $room): ?Round
+    public function getCurrentForRoom(RoomContract $room): ?RoundContract
     {
-        return $room->rounds()
-            ->latest()
-            ->first();
+        return $room->getCurrentRound();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function createForRoom(Room $room, RoundStatus $status): Round
+    public function createForRoom(RoomContract $room, RoundStatus $status): RoundContract
     {
-        return $room->rounds()->create([
+        return Round::create([
+            'room_id' => $room->getId(),
             'status' => $status,
         ]);
     }
@@ -32,18 +32,16 @@ class EloquentRoundRepository implements RoundRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function updateStatus(Round $round, RoundStatus $status): void
+    public function updateStatus(RoundContract $round, RoundStatus $status): void
     {
-        $round->update([
-            'status' => $status,
-        ]);
+        $round->setStatus($status);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function delete(Round $round): void
+    public function delete(RoundContract $round): void
     {
-        $round->delete();
+        Round::destroy($round->getId());
     }
 }

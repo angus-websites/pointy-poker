@@ -41,10 +41,6 @@ interface RoomContract
      */
     public function getParticipant(int $participantId): ?ParticipantContract;
 
-    /**
-     * Add a participant to the room.
-     */
-    public function addParticipant(ParticipantContract $participant): void;
 
     /**
      * Get all rounds for the room.
@@ -58,9 +54,5 @@ interface RoomContract
      */
     public function getCurrentRound(): ?RoundContract;
 
-    /**
-     * Add a new round to this room.
-     */
-    public function addRound(RoundContract $round): void;
 
 }

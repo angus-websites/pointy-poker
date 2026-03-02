@@ -2,9 +2,10 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Contracts\Model\ParticipantContract;
+use App\Contracts\Model\RoundContract;
+use App\Contracts\Model\VoteContract;
 use App\Contracts\Repository\VoteRepositoryInterface;
-use App\Models\Participant;
-use App\Models\Round;
 use App\Models\Vote;
 use Illuminate\Support\Collection;
 
@@ -13,30 +14,30 @@ class EloquentVoteRepository implements VoteRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function getForRound(Round $round): Collection
+    public function getForRound(RoundContract $round): Collection
     {
-        return $round->votes()->get();
+        return Vote::where('round_id', $round->getId())->get();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getForParticipant(Round $round, Participant $participant): ?Vote
+    public function getForParticipant(RoundContract $round, ParticipantContract $participant): ?VoteContract
     {
-        return $round->votes()
-            ->where('participant_id', $participant->id)
+        return Vote::where('round_id', $round->getId())
+            ->where('participant_id', $participant->getId())
             ->first();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function cast(Round $round, Participant $participant, string $value): Vote
+    public function cast(RoundContract $round, ParticipantContract $participant, string $value): VoteContract
     {
         return Vote::updateOrCreate(
             [
-                'round_id' => $round->id,
-                'participant_id' => $participant->id,
+                'round_id' => $round->getId(),
+                'participant_id' => $participant->getId(),
             ],
             [
                 'value' => $value,

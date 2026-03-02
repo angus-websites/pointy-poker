@@ -26,7 +26,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function findById(int $id): ?Room
+    public function findById(int $id): ?RoomContract
     {
         return Room::find($id);
     }
@@ -34,7 +34,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function findBySlug(string $slug): ?Room
+    public function findBySlug(string $slug): ?RoomContract
     {
         return Room::where('slug', $slug)->first();
     }
@@ -42,7 +42,7 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function create(UserContract $owner, array $data = []): Room
+    public function create(UserContract $owner, array $data = []): RoomContract
     {
         $room = Room::create([
             'owner_id' => $owner->getId(),
