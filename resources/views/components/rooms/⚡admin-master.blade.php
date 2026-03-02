@@ -1,17 +1,19 @@
 <?php
 
+use App\Contracts\Model\RoomContract;
 use App\Enum\RoundStatus;
-use App\Models\Room;
+use App\Models\Round;
+use App\Services\RoomSessionService;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
 new class extends Component {
-    public Room $room;
+    public RoomContract $room;
 
-    public ?RoundStatus $status = null;
+    public RoundStatus $status;
 
     public Collection $participants;
-    public array $participantVotes = []; // ['participant_id' => 'value']
+    public Collection $participantVotes; // ['participant_id' => 'value']
 
     protected $listeners = [
         'begin-voting' => 'beginVoting',
@@ -37,7 +39,9 @@ new class extends Component {
 
     public function newRound(): void
     {
-        $this->room->rounds()->create([
+        // TODO service
+        Round::create([
+            'room_id' => $this->room->getId(),
             'status' => RoundStatus::IDLE,
         ]);
 
@@ -46,13 +50,16 @@ new class extends Component {
 
     protected function updateStatus(RoundStatus $status): void
     {
-        $round = $this->room->round();
+
+        // Get the current round
+        $round = $this->room->getCurrentRound();
 
         if (!$round) {
             return;
         }
 
-        $round->update(['status' => $status]);
+        // Set the new status
+        $round->setStatus($status);
 
         $this->syncFromDatabase();
     }
@@ -65,24 +72,27 @@ new class extends Component {
 
     protected function syncFromDatabase(): void
     {
-        $round = $this->room->round();
+        $round = $this->room->getCurrentRound();
 
         if (!$round) {
             // Create a round if it doesn't exist
+            // TODO service
             $this->newRound();
             return;
         }
 
-        $this->status = $round->status;
+        $sessionService = app(RoomSessionService::class);
 
-        $cutoff = now()->subSeconds(10);
-        $this->participants = $this->room->participants()
-            ->where('last_seen_at', '>=', $cutoff)
-            ->get();
+        // Update the status
+        $this->status = $round->getStatus();
 
-        $this->participantVotes = $round->votes()
-            ->pluck('value', 'participant_id')
-            ->toArray();
+
+        // Fetch active participants in the room
+        $this->participants = $sessionService->getActiveParticipants($this->room);
+
+
+        // Fetch votes for active participants
+        $this->participantVotes = $sessionService->getParticipantsVotes($this->room);
 
     }
 };
@@ -115,7 +125,7 @@ new class extends Component {
         </div>
     @else
         {{-- Live table --}}
-        <livewire:rooms.live-table-guest
+        <livewire:rooms.live-table
             :participants="$participants"
             :votes="$participantVotes"
             :status="$status"

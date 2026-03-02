@@ -1,23 +1,25 @@
 <?php
 
+use App\Contracts\Model\ParticipantContract;
+use App\Contracts\Model\RoomContract;
+use App\Contracts\Model\RoundContract;
 use App\Enum\RoundStatus;
-use App\Models\Participant;
-use App\Models\Room;
 use App\Models\Vote;
+use App\Services\RoomSessionService;
 use Flux\Flux;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 new class extends Component {
-    public Room $room;
-    public Participant $participant;
-    public ?RoundStatus $status = null;
+    public RoomContract $room;
+    public ParticipantContract $participant;
+    public RoundStatus $status;
 
-    public int $roundId;
+    public RoundContract $currentRound;
     public ?string $currentVote = null;
 
     public Collection $participants;
-    public array $participantVotes = []; // ['participant_id' => 'value']
+    public Collection $participantVotes;
 
     protected $listeners = [
         'vote-cast' => 'handleVote',
@@ -25,10 +27,12 @@ new class extends Component {
 
     public function handleVote($point): void
     {
+
+        // TODO service
         Vote::updateOrCreate(
             [
-                'round_id' => $this->roundId,
-                'participant_id' => $this->participant->id,
+                'round_id' => $this->currentRound->getId(),
+                'participant_id' => $this->participant->getId(),
             ],
             [
                 'value' => $point,
@@ -48,6 +52,7 @@ new class extends Component {
     public function heartbeat(): void
     {
         // Update only this participant
+        // TODO service
         $this->participant->update([
             'last_seen_at' => now(),
         ]);
@@ -55,31 +60,33 @@ new class extends Component {
         $this->syncFromDatabase();
     }
 
-    protected function syncFromDatabase(): void
+    public function syncFromDatabase(): void
     {
-        $round = $this->room->round();
+
+        $sessionService = app(RoomSessionService::class);
+
+        // Get current round
+        $round = $this->room->getCurrentRound();
 
         if (!$round) {
             abort(404, 'No active round found');
         }
 
-        $this->roundId = $round->id;
-        $this->status = $round->status;
+        // Update state
+        $this->currentRound = $round;
 
-        $this->currentVote = $round->votes()
-            ->where('participant_id', $this->participant->id)
-            ->value('value');
+        // Update the status
+        $this->status = $round->getStatus();
 
-        // TODO optimize this by eager loading votes with participants
+        // Update current vote
+        $this->currentVote = $round->getVote($this->participant->getId())?->value;
 
-        $cutoff = now()->subSeconds(10);
-        $this->participants = $this->room->participants()
-            ->where('last_seen_at', '>=', $cutoff)
-            ->get();
+        // Fetch active participants in the room
+        $this->participants = $sessionService->getActiveParticipants($this->room);
 
-        $this->participantVotes = $round->votes()
-            ->pluck('value', 'participant_id')
-            ->toArray();
+
+        // Fetch votes for active participants
+        $this->participantVotes = $sessionService->getParticipantsVotes($this->room);
 
     }
 };
@@ -94,13 +101,13 @@ new class extends Component {
 
     {{-- Vote --}}
     <livewire:rooms.voting
-        :participant-id="$this->participant->id"
+        :participant-id="$this->participant->getId()"
         :status="$status"
         :current-vote="$currentVote"
     />
 
     {{-- Live table --}}
-    <livewire:rooms.live-table-guest
+    <livewire:rooms.live-table
         :participants="$participants"
         :current-participant-id="$participant->id"
         :votes="$participantVotes"

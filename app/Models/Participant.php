@@ -64,7 +64,7 @@ class Participant extends Model implements ParticipantContract
     /**
      * {@inheritDoc}
      */
-    public function touch(): void
+    public function ping(): void
     {
         $this->last_seen_at = Carbon::now();
         $this->save();

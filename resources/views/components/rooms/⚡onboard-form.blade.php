@@ -16,7 +16,7 @@ new class extends Component {
     ];
 
 
-    public function join(RoomService $roomService): RedirectResponse
+    public function join(RoomService $roomService)
     {
 
         // Validate input
@@ -26,7 +26,7 @@ new class extends Component {
         $roomService->createParticipant(
             room: $this->room,
             name: $this->name,
-        )
+        );
 
         // Redirect to join room again
         return redirect()->route('rooms.show', ['slug' => $this->room->slug]);

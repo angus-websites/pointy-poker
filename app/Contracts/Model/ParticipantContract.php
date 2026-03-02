@@ -23,6 +23,6 @@ interface ParticipantContract
     /**
      * Update the last seen timestamp to now.
      */
-    public function touch(): void;
+    public function ping(): void;
 
 }
