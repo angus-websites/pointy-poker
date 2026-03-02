@@ -73,7 +73,7 @@ new class extends Component {
 
         @foreach($this->points as $point)
             <livewire:rooms.point-card
-                :key="'point-'.$point.'-'.$this->currentVote"
+                :key="'point-'.$point"
                 @voted="vote($event.detail.point)"
                 :point="$point"
                 :selected="$currentVote === $point"

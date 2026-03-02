@@ -1,10 +1,13 @@
 <?php
 
+use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
-new class extends Component
-{
+new class extends Component {
+    #[Reactive]
     public bool $enabled = true;
+
+    #[Reactive]
     public bool $selected = false;
     public string $point;
 };
