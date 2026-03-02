@@ -28,7 +28,7 @@
                                 <div class="p-6 grid grid-cols-1 gap-y-10">
 
                                     {{-- Status bar --}}
-                                    <livewire:rooms.status-bar :room="$room"/>
+                                    <livewire:rooms.status-bar :status="$room->round()?->status"/>
 
                                     {{-- Vote --}}
                                     <livewire:rooms.voting :room="$room" :participant="$participant"/>

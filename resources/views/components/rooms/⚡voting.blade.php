@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\RoundStatus;
 use App\Models\Participant;
 use App\Models\Room;
 use App\Models\Vote;
@@ -9,7 +10,12 @@ use Livewire\Component;
 new class extends Component {
     public Room $room;
     public Participant $participant;
+
     public string $currentVote = '';
+    public bool $canVote = false;
+
+
+    protected array $points = ['1', '2', '3', '5', '8', '13', '20'];
 
     public function mount()
     {
@@ -18,11 +24,23 @@ new class extends Component {
         if ($round) {
             $vote = $round->votes()->where('participant_id', $this->participant->id)->first();
             $this->currentVote = $vote ? $vote->value : '';
+
+            // Enable voting if round is in VOTING status
+            $this->canVote = $round->status == RoundStatus::VOTING;
         }
+
+
     }
+
+
 
     public function vote($point)
     {
+        // Prevent voting if not allowed
+        if (!$this->canVote) {
+            Flux::toast('Voting is not currently enabled', 'error');
+            return;
+        }
 
         $round = $this->room->round();
 
@@ -47,80 +65,29 @@ new class extends Component {
 
     }
 
-    public function shouldEnable(): bool
-    {
-
-        // TODO cache this to avoid n+1 queries
-        $round = $this->room->round();
-        return $round && $round->status == \App\Enum\RoundStatus::VOTING;
-    }
 };
 ?>
 
 <div>
     <div class="grid grid-cols-3 md:grid-cols-5 gap-4">
 
-        @if($this->shouldEnable())
-            @foreach(['1', '2', '3', '5', '8', '13', '20'] as $point)
-                <flux:card
-                    wire:click="vote('{{ $point }}')"
-                    size="sm"
-                    @class([
-                        'hover:cursor-pointer border' => true,
+        @foreach($this->points as $point)
+            <livewire:rooms.point-card
+                :key="'point-'.$point.'-'.$this->currentVote"
+                @voted="vote($event.detail.point)"
+                :point="$point"
+                :selected="$currentVote === $point"
+                :enabled="$canVote"/>
 
-                        // Selected state
-                        'border-lime-600 dark:border-lime-300 bg-lime-600 dark:bg-lime-700' => $currentVote === $point,
+        @endforeach
 
-                        // Default state
-                        'border-transparent hover:bg-zinc-50 dark:hover:bg-zinc-700 ' => $currentVote !== $point,
-                    ])
-                >
-                    <flux:text
-                        @class([
-                         'mt-2 text-center' => true,
-
-                         // Selected state
-                         'text-white' => $currentVote === $point,
-
-                         // Default state
-                         '' => $currentVote !== $point,
-                     ])
-                    >
-                        {{ $point }}
-                    </flux:text>
-                </flux:card>
-            @endforeach
-        @else
-
-            @foreach(['1', '2', '3', '5', '8', '13', '20'] as $point)
-                <flux:card
-                    size="sm"
-                    @class([
-                        'hover:cursor-not-allowed opacity-50' => true,
-
-                        // Selected state
-                        'border-lime-600 dark:border-lime-300 bg-lime-600 dark:bg-lime-700' => $currentVote === $point,
-
-                        // Default state
-                        'border-transparent' => $currentVote !== $point,
-                    ])
-                >
-                    <flux:text
-                        @class([
-                         'mt-2 text-center' => true,
-
-                         // Selected state
-                         'text-white' => $currentVote === $point,
-
-                         // Default state
-                         '' => $currentVote !== $point,
-                     ])
-                    >
-                        {{ $point }}
-                    </flux:text>
-                </flux:card>
-            @endforeach
-
-        @endif
     </div>
+
+    @unless($this->canVote)
+        <div class="mt-5">
+            <flux:text variant="subtle">
+                Voting is currently disabled
+            </flux:text>
+        </div>
+    @endunless
 </div>

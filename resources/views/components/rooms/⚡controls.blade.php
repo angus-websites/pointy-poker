@@ -28,39 +28,30 @@ new class extends Component {
         return match ($this->status) {
 
             RoundStatus::IDLE => [
-                'title' => 'Waiting to start',
                 'description' => 'Click "Begin voting" to start the round and allow users to submit their estimates.',
                 'button' => [
                     'label' => 'Begin Voting',
                     'action' => 'beginVoting',
                     'color' => 'lime',
                 ],
-                'icon' => 'clock',
-                'colorClasses' => 'text-amber-600 dark:text-amber-500',
             ],
 
             RoundStatus::VOTING => [
-                'title' => 'Voting in progress',
                 'description' => 'When all users have submitted their estimates, click "Reveal" to show the results.',
                 'button' => [
                     'label' => 'Reveal',
                     'action' => 'reveal',
                     'color' => 'blue',
                 ],
-                'icon' => 'clock',
-                'colorClasses' => 'text-amber-700 dark:text-amber-500',
             ],
 
             RoundStatus::REVEALED => [
-                'title' => 'Showing results',
                 'description' => 'Click "Reset" to clear estimates and start a new round.',
                 'button' => [
                     'label' => 'Reset',
                     'action' => 'newRound',
                     'color' => 'amber',
                 ],
-                'icon' => 'clock',
-                'colorClasses' => 'text-amber-700 dark:text-amber-500',
             ],
         };
     }
@@ -110,15 +101,7 @@ new class extends Component {
 
 <div class="flex flex-col gap-y-5 md:flex-row md:items-end md:justify-between">
     <div>
-        <div class="flex items-center gap-x-2">
-
-            {{-- Status Icon --}}
-            <flux:icon name="{{ $meta['icon'] }}" class="size-5  {{$meta['colorClasses']}}"/>
-
-            <flux:heading size="lg" level="2">
-                {{ $meta['title'] }}
-            </flux:heading>
-        </div>
+        <livewire:rooms.status-header :status="$this->status" :key="'status-'.$this->status?->value"/>
 
         <flux:text class="mt-1">
             {{ $meta['description'] }}
