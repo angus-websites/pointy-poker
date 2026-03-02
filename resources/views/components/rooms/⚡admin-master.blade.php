@@ -4,7 +4,7 @@ use App\Contracts\Model\RoomContract;
 use App\Enum\RoundStatus;
 use App\Models\Round;
 use App\Services\RoomSessionService;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 new class extends Component {

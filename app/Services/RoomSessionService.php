@@ -40,7 +40,7 @@ class RoomSessionService
         $votes = $this->voteRepository->getForRound($currentRound);
 
         return $votes->mapWithKeys(function ($vote) {
-            return [$vote->getParticipantId() => $vote];
+            return [$vote->getParticipantId() => $vote->getValue()];
         });
     }
 }
