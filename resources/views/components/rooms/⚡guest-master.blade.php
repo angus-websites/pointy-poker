@@ -60,7 +60,7 @@ new class extends Component {
         $round = $this->room->round();
 
         if (!$round) {
-            return;
+            abort(404, 'No active round found');
         }
 
         $this->roundId = $round->id;

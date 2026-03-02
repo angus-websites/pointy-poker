@@ -69,7 +69,10 @@ new class extends Component {
         $round = $this->room->round();
 
         if (!$round) {
-            return;
+            // Create a round if it doesn't exist
+            $this->newRound();
+            $this->syncFromDatabase();
+
         }
 
         $this->status = $round->status;
