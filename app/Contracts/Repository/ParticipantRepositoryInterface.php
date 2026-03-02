@@ -24,5 +24,5 @@ interface ParticipantRepositoryInterface
     /**
      * Add a new participant to a room.
      */
-    public function create(RoomContract $room, string $name, string $token): ParticipantContract;
+    public function create(RoomContract $room, array $data): ParticipantContract;
 }

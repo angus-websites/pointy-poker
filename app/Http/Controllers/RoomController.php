@@ -24,8 +24,8 @@ class RoomController extends Controller
     {
         $room = $this->roomService->getRoomBySlug($slug);
 
-        $ownerCookieName = 'pokey_owner_'.$room->id;
-        $participantCookieName = 'pokey_participant_'.$room->id;
+        $ownerCookieName = 'pokey_owner_'.$room->getId();
+        $participantCookieName = 'pokey_participant_'.$room->getId();
 
         /*
         |--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ class RoomController extends Controller
         */
 
         // If logged-in owner
-        if (auth()->check() && $room->owner_id === auth()->id()) {
+        if (auth()->check() && $room->getOwnerId() === auth()->id()) {
 
             // Store owner cookie for future detection
             cookie()->queue(
@@ -65,10 +65,8 @@ class RoomController extends Controller
 
             try {
                 $participantData = json_decode(decrypt($cookie), true);
+                $participant = $room->getParticipantByToken($participantData['token'] ?? '');
 
-                $participant = $room->participants()
-                    ->where('token', $participantData['token'] ?? null)
-                    ->first();
 
                 if (! $participant) {
                     cookie()->queue(cookie()->forget($participantCookieName));

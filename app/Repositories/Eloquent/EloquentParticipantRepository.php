@@ -35,12 +35,13 @@ class EloquentParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function create(RoomContract $room, string $name, string $token): ParticipantContract
+    public function create(RoomContract $room, array $data): ParticipantContract
     {
+
         return Participant::create([
             'room_id' => $room->getId(),
-            'name' => $name,
-            'token' => $token,
+            'name' => $data['name'],
+            'token' => $data['token'],
             'last_seen_at' => now(),
         ]);
     }

@@ -96,6 +96,16 @@ class Room extends Model implements RoomContract
     /**
      * {@inheritDoc}
      */
+    public function getParticipantByToken(string $token): ?ParticipantContract
+    {
+        return $this->participants()
+            ->where('token', $token)
+            ->first();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getRounds(): Collection
     {
         return $this->rounds()->get();

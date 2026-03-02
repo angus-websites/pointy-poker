@@ -41,6 +41,11 @@ interface RoomContract
      */
     public function getParticipant(int $participantId): ?ParticipantContract;
 
+    /**
+     * Get a participant by token.
+     */
+    public function getParticipantByToken(string $token): ?ParticipantContract;
+
 
     /**
      * Get all rounds for the room.

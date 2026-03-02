@@ -1,13 +1,13 @@
 <?php
 
-use App\Models\Participant;
-use App\Models\Room;
-use Illuminate\Support\Str;
+use App\Contracts\Model\RoomContract;
+use App\Services\RoomService;
+use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
 new class extends Component {
 
-    public Room $room;
+    public RoomContract $room;
 
     public string $name = '';
 
@@ -15,33 +15,18 @@ new class extends Component {
         'name' => 'required|string|min:2|max:25',
     ];
 
-    public function join()
+
+    public function join(RoomService $roomService): RedirectResponse
     {
 
         // Validate input
         $this->validate();
 
-        // Generate token
-        $token = (string)Str::uuid();
-
         // Create participant
-        Participant::create([
-            'room_id' => $this->room->id,
-            'name' => $this->name,
-            'token' => $token,
-        ]);
-
-        // Create a cookie with guest info
-        //TODO move to service
-        cookie()->queue(
-            cookie(
-                'pokey_participant_' . $this->room->id,
-                encrypt(json_encode([
-                    'token' => $token,
-                ])),
-                60 * 24 * 365 // 1 year
-            )
-        );
+        $roomService->createParticipant(
+            room: $this->room,
+            name: $this->name,
+        )
 
         // Redirect to join room again
         return redirect()->route('rooms.show', ['slug' => $this->room->slug]);
