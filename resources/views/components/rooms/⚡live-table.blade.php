@@ -8,15 +8,15 @@ use Livewire\Component;
 new class extends Component {
     #[Reactive]
     public Collection $participants;
+
     public ?int $currentParticipantId = null;
-    #[Reactive]
-    public Collection $votes; // participant_id => value
+
     #[Reactive]
     public RoundStatus $status;
 
-    protected function badgeMeta(int $participantId): array
+    protected function badgeMeta(object $participant): array
     {
-        $hasVoted = isset($this->votes[$participantId]);
+        $hasVoted = $participant->vote !== null;
 
         return match ($this->status) {
 
@@ -37,20 +37,20 @@ new class extends Component {
         };
     }
 
-    protected function displayPoints(int $participantId): string
+    protected function displayPoints(object $participant): string
     {
-        $hasVoted = isset($this->votes[$participantId]);
-        $isCurrent = $participantId === $this->currentParticipantId;
+        $hasVoted = $participant->vote !== null;
+        $isCurrent = $participant->id === $this->currentParticipantId;
 
         if ($this->status === RoundStatus::REVEALED) {
-            return $this->votes[$participantId] ?? '-';
+            return $participant->vote ?? '-';
         }
 
         if ($this->status === RoundStatus::VOTING) {
 
             // Always show current participant their vote
             if ($isCurrent) {
-                return $this->votes[$participantId] ?? '-';
+                return $participant->vote ?? '-';
             }
 
             return $hasVoted ? 'Hidden' : '-';
@@ -73,7 +73,8 @@ new class extends Component {
             @foreach($participants as $p)
 
                 @php
-                    $badge = $this->badgeMeta($p->id);
+
+                    $badge = $this->badgeMeta($p);
                 @endphp
 
                 <flux:table.row>
@@ -90,7 +91,7 @@ new class extends Component {
 
                     <flux:table.cell variant="strong">
                         <flux:text class="text-xs">
-                            {{ $this->displayPoints($p->id) }}
+                            {{ $this->displayPoints($p) }}
                         </flux:text>
                     </flux:table.cell>
 

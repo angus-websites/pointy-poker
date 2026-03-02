@@ -12,8 +12,7 @@ new class extends Component {
 
     public RoundStatus $status;
 
-    public Collection $participants;
-    public Collection $participantVotes; // ['participant_id' => 'value']
+    public Collection $participantData;
 
     protected $listeners = [
         'begin-voting' => 'beginVoting',
@@ -86,13 +85,8 @@ new class extends Component {
         // Update the status
         $this->status = $round->getStatus();
 
-
-        // Fetch active participants in the room
-        $this->participants = $sessionService->getActiveParticipants($this->room);
-
-
-        // Fetch votes for active participants
-        $this->participantVotes = $sessionService->getParticipantsVotes($this->room);
+        // Fetch Participant Data
+        $this->participantData = $sessionService->getActiveParticipantsWithVotes($this->room);
 
     }
 };
@@ -104,11 +98,11 @@ new class extends Component {
     {{-- Control bar --}}
     <livewire:rooms.controls
         :status="$status"
-        :has-participants="$participants->isNotEmpty()"
+        :has-participants="$participantData->isNotEmpty()"
     />
 
 
-    @if($this->participants->isEmpty())
+    @if($this->participantData->isEmpty())
         <div class="text-center my-5">
             <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" aria-hidden="true"
                  class="mx-auto size-12 text-gray-400 dark:text-gray-500">
@@ -126,8 +120,7 @@ new class extends Component {
     @else
         {{-- Live table --}}
         <livewire:rooms.live-table
-            :participants="$participants"
-            :votes="$participantVotes"
+            :participants="$participantData"
             :status="$status"
         />
     @endif

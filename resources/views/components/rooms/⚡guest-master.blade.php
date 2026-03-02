@@ -18,8 +18,7 @@ new class extends Component {
     public RoundContract $currentRound;
     public ?string $currentVote = null;
 
-    public Collection $participants;
-    public Collection $participantVotes;
+    public Collection $participantData;
 
     protected $listeners = [
         'vote-cast' => 'handleVote',
@@ -81,12 +80,8 @@ new class extends Component {
         // Update current vote
         $this->currentVote = $round->getVote($this->participant->getId())?->value;
 
-        // Fetch active participants in the room
-        $this->participants = $sessionService->getActiveParticipants($this->room);
-
-
-        // Fetch votes for active participants
-        $this->participantVotes = $sessionService->getParticipantsVotes($this->room);
+        // Fetch Participant Data
+        $this->participantData = $sessionService->getActiveParticipantsWithVotes($this->room);
 
     }
 };
@@ -108,9 +103,8 @@ new class extends Component {
 
     {{-- Live table --}}
     <livewire:rooms.live-table
-        :participants="$participants"
+        :participants="$participantData"
         :current-participant-id="$participant->id"
-        :votes="$participantVotes"
         :status="$status"
     />
 
