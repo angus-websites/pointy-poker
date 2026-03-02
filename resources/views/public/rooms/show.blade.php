@@ -24,7 +24,7 @@
                         <section>
                             <div
                                 class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-white/10 dark:shadow-none dark:outline dark:-outline-offset-1 dark:outline-white/10">
-                                <livewire:rooms.guest-card :participant="$participant" :room="$room"/>
+                                <livewire:rooms.guest-master :participant="$participant" :room="$room"/>
                             </div>
                         </section>
                     </div>

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int $id
  * @property int $room_id
- * @property string $status
+ * @property RoundStatus $status
  */
 class Round extends Model
 {

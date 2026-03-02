@@ -1,73 +1,31 @@
 <?php
 
 use App\Enum\RoundStatus;
-use App\Models\Participant;
-use App\Models\Room;
-use App\Models\Vote;
-use Flux\Flux;
+use Livewire\Attributes\Reactive;
 use Livewire\Component;
 
 new class extends Component {
-    public Room $room;
-    public Participant $participant;
 
-    public string $currentVote = '';
-
+    public int $participantId;
+    #[Reactive]
+    public RoundStatus $status;
+    #[Reactive]
+    public ?string $currentVote = null;
 
     protected array $points = ['1', '2', '3', '5', '8', '13', '20'];
 
-    public function mount()
-    {
-        // Fetch current vote if exists
-        $round = $this->room->round();
-        if ($round) {
-            $vote = $round->votes()->where('participant_id', $this->participant->id)->first();
-            $this->currentVote = $vote ? $vote->value : '';
-
-        }
-
-
-    }
-
     public function canVote(): bool
     {
-        $round = $this->room->round();
-        return $round && $round->status == RoundStatus::VOTING;
+        return $this->status === RoundStatus::VOTING;
     }
 
-
-
-    public function vote($point)
+    public function vote($point): void
     {
-        // Prevent voting if not allowed
-        if (!$this->canVote()) {
-            Flux::toast('Voting is not currently enabled', 'error');
-            return;
-        }
+        if (!$this->canVote()) return;
 
-        $round = $this->room->round();
-
-        if (!$round) {
-            Flux::toast('No active round to vote in', 'error');
-            return;
-        }
-
-        // Upsert vote
-        Vote::updateOrCreate(
-            [
-                'round_id' => $round->id,
-                'participant_id' => $this->participant->id,
-            ],
-            [
-                'value' => $point,
-            ]
-        );
-
-        $this->currentVote = $point;
-        Flux::toast('You voted');
-
+        // Emit upward instead of touching DB
+        $this->dispatch('vote-cast', point: $point);
     }
-
 };
 ?>
 
@@ -86,11 +44,16 @@ new class extends Component {
 
     </div>
 
-    @unless($this->canVote())
-        <div class="mt-5">
+    <div class="mt-5">
+        @if($this->canVote())
+        <flux:text variant="subtle">
+
+            You can now vote!
+        </flux:text>
+        @else
             <flux:text variant="subtle">
                 Voting is currently disabled
             </flux:text>
-        </div>
-    @endunless
+        @endif
+    </div>
 </div>

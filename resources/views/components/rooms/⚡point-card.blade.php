@@ -27,7 +27,7 @@ new class extends Component {
         'border-lime-600 dark:border-lime-300 bg-lime-600 dark:bg-lime-700' => $this->selected,
 
         // Default
-        'border-transparent hover:bg-zinc-50 dark:hover:bg-zinc-700' => !$this->selected,
+        'border-transparent hover:bg-zinc-50 dark:hover:bg-zinc-700' => !$this->selected && $this->enabled,
     ])
 >
     <flux:text
