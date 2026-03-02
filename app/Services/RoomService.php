@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Contracts\Model\UserContract;
 use App\Contracts\Repository\RoomRepositoryInterface;
 use App\Models\Room;
-use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 
@@ -17,7 +17,7 @@ class RoomService
     /**
      * Get rooms owned by a specific user.
      */
-    public function getOwnedRooms(User $user): Collection
+    public function getOwnedRooms(UserContract $user): Collection
     {
         return $this->roomRepository->getByOwner($user);
     }
