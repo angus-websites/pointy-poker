@@ -5,6 +5,7 @@ use App\Models\Participant;
 use App\Models\Room;
 use App\Models\Vote;
 use Flux\Flux;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
 new class extends Component {
@@ -14,6 +15,9 @@ new class extends Component {
 
     public int $roundId;
     public ?string $currentVote = null;
+
+    public Collection $participants;
+    public array $participantVotes = []; // ['participant_id' => 'value']
 
     protected $listeners = [
         'vote-cast' => 'handleVote',
@@ -55,6 +59,14 @@ new class extends Component {
         $this->currentVote = $round->votes()
             ->where('participant_id', $this->participant->id)
             ->value('value');
+
+        // TODO optimize this by eager loading votes with participants
+        $this->participants = $this->room->participants()->get();
+
+        $this->participantVotes = $round->votes()
+            ->pluck('value', 'participant_id')
+            ->toArray();
+
     }
 
     public function refreshStatus(): void
@@ -79,5 +91,10 @@ new class extends Component {
     />
 
     {{-- Live table --}}
-    <livewire:rooms.live-table :room="$room"/>
+    <livewire:rooms.live-table-guest
+        :participants="$participants"
+        :current-participant-id="$participant->id"
+        :votes="$participantVotes"
+        :status="$status"
+    />
 </div>
