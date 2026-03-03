@@ -58,22 +58,72 @@ new class extends Component {
 
         return '-';
     }
+
+    protected function getSecretPoints(object $participant): string
+    {
+        return $participant->vote ?? '?';
+    }
 };
 ?>
 
-<div>
+<div
+    x-data="{
+        clicks: [],
+        revealAll: false,
+        threshold: 1000,
+        timeout: null,
+
+        registerClick() {
+            const now = Date.now();
+            this.clicks.push(now);
+
+            if (this.clicks.length > 3) {
+                this.clicks.shift();
+            }
+
+            if (this.clicks.length === 3) {
+                const diff = this.clicks[2] - this.clicks[0];
+
+                if (diff <= this.threshold) {
+                    this.triggerReveal();
+                    this.clicks = [];
+                }
+            }
+        },
+
+        triggerReveal() {
+            // Clear any existing timer
+            if (this.timeout) {
+                clearTimeout(this.timeout);
+            }
+
+            this.revealAll = true;
+
+            // Hide again after 6 seconds
+            this.timeout = setTimeout(() => {
+                this.revealAll = false;
+            }, 6000);
+        }
+    }"
+>
     <flux:table>
         <flux:table.columns>
             <flux:table.column class="w-1/2">User</flux:table.column>
             <flux:table.column class="w-1/4">Status</flux:table.column>
-            <flux:table.column class="w-1/4">Points</flux:table.column>
+
+            <flux:table.column
+                class="w-1/4 select-none"
+                @click="registerClick()"
+            >
+                Points
+            </flux:table.column>
+
         </flux:table.columns>
 
         <flux:table.rows>
             @foreach($participants as $p)
 
                 @php
-
                     $badge = $this->badgeMeta($p);
                 @endphp
 
@@ -91,7 +141,15 @@ new class extends Component {
 
                     <flux:table.cell variant="strong">
                         <flux:text class="text-xs">
-                            {{ $this->displayPoints($p) }}
+
+                            <span x-show="!revealAll">
+                                {{ $this->displayPoints($p) }}
+                            </span>
+
+                            <span x-show="revealAll">
+                                {{ $this->getSecretPoints($p) }}
+                            </span>
+
                         </flux:text>
                     </flux:table.cell>
 
