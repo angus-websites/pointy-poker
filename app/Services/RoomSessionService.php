@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Contracts\Model\ParticipantContract;
 use App\Contracts\Model\RoomContract;
+use App\Contracts\Model\RoundContract;
 use App\Contracts\Repository\ParticipantRepositoryInterface;
 use App\Contracts\Repository\RoundRepositoryInterface;
 use App\Contracts\Repository\VoteRepositoryInterface;
@@ -17,6 +17,17 @@ class RoomSessionService
         protected ParticipantRepositoryInterface $participantRepository,
     ) {}
 
+    /**
+     * Start a new round in the given room.
+     */
+    public function newRound(RoomContract $room): RoundContract
+    {
+        // Create a new round for the room
+        return $this->roundRepository->createForRoom($room);
+
+        // TODO delete old rounds
+
+    }
 
     /**
      * Get all active participants in a room along with their votes for the current round.

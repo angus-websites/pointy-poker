@@ -17,7 +17,7 @@ interface RoundRepositoryInterface
     /**
      * Create a new round for a room with the given status.
      */
-    public function createForRoom(RoomContract $room, RoundStatus $status): RoundContract;
+    public function createForRoom(RoomContract $room, RoundStatus $status = RoundStatus::IDLE): RoundContract;
 
     /**
      * Update the status of a round.

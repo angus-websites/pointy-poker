@@ -4,7 +4,6 @@ use App\Contracts\Model\ParticipantContract;
 use App\Contracts\Model\RoomContract;
 use App\Contracts\Model\RoundContract;
 use App\Enum\RoundStatus;
-use App\Models\Vote;
 use App\Services\RoomSessionService;
 use Flux\Flux;
 use Illuminate\Support\Collection;
@@ -27,15 +26,9 @@ new class extends Component {
     public function handleVote($point): void
     {
 
-        // TODO service
-        Vote::updateOrCreate(
-            [
-                'round_id' => $this->currentRound->getId(),
-                'participant_id' => $this->participant->getId(),
-            ],
-            [
-                'value' => $point,
-            ]
+        $this->currentRound->castVote(
+            $this->participant,
+            $point
         );
 
         $this->currentVote = $point;
@@ -50,11 +43,8 @@ new class extends Component {
 
     public function heartbeat(): void
     {
-        // Update only this participant
-        // TODO service
-        $this->participant->update([
-            'last_seen_at' => now(),
-        ]);
+
+        $this->participant->ping();
 
         $this->syncFromDatabase();
     }
@@ -78,7 +68,7 @@ new class extends Component {
         $this->status = $round->getStatus();
 
         // Update current vote
-        $this->currentVote = $round->getVote($this->participant->getId())?->value;
+        $this->currentVote = $round->getVote($this->participant)?->value;
 
         // Fetch Participant Data
         $this->participantData = $sessionService->getActiveParticipantsWithVotes($this->room);

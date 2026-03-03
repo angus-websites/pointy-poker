@@ -2,7 +2,6 @@
 
 use App\Contracts\Model\RoomContract;
 use App\Enum\RoundStatus;
-use App\Models\Round;
 use App\Services\RoomSessionService;
 use Illuminate\Support\Collection;
 use Livewire\Component;
@@ -38,11 +37,10 @@ new class extends Component {
 
     public function newRound(): void
     {
-        // TODO service
-        Round::create([
-            'room_id' => $this->room->getId(),
-            'status' => RoundStatus::IDLE,
-        ]);
+
+        $sessionService = app(RoomSessionService::class);
+
+        $sessionService->newRound($this->room);
 
         $this->syncFromDatabase();
     }

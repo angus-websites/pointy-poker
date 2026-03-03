@@ -32,10 +32,10 @@ interface RoundContract
     /**
      * Get a vote by participant ID.
      */
-    public function getVote(int $participantId): ?VoteContract;
+    public function getVote(ParticipantContract $participant): ?VoteContract;
 
     /**
      * Cast or update a vote for a participant.
      */
-    public function castVote(VoteContract $vote): void;
+    public function castVote(ParticipantContract $participant, string $value): void;
 }

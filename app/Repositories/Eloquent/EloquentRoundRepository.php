@@ -21,7 +21,7 @@ class EloquentRoundRepository implements RoundRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function createForRoom(RoomContract $room, RoundStatus $status): RoundContract
+    public function createForRoom(RoomContract $room, RoundStatus $status = RoundStatus::IDLE): RoundContract
     {
         return Round::create([
             'room_id' => $room->getId(),

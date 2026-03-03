@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\Model\ParticipantContract;
 use App\Contracts\Model\RoundContract;
 use App\Contracts\Model\VoteContract;
 use App\Enum\RoundStatus;
@@ -70,26 +71,26 @@ class Round extends Model implements RoundContract
     /**
      * {@inheritDoc}
      */
-    public function getVote(int $participantId): ?VoteContract
+    public function getVote(ParticipantContract $participant): ?VoteContract
     {
-        return $this->votes()->where('participant_id', $participantId)->first();
+        return $this->votes()->where('participant_id', $participant->getId())->first();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function castVote(VoteContract $vote): void
+    public function castVote(ParticipantContract $participant, string $value): void
     {
-        $existingVote = $this->getVote($vote->getParticipantId());
+        $existingVote = $this->getVote($participant);
 
         if ($existingVote) {
             // Update existing vote
-            $existingVote->setValue($vote->getValue());
+            $existingVote->setValue($value);
         } else {
             // Create new vote
             $this->votes()->create([
-                'participant_id' => $vote->getParticipantId(),
-                'value' => $vote->getValue(),
+                'participant_id' => $participant->getId(),
+                'value' => $value,
             ]);
         }
     }
