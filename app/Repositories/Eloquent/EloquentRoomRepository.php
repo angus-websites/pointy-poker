@@ -9,12 +9,10 @@ use App\Enum\RoundStatus;
 use App\Models\Room;
 use App\Models\Round;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class EloquentRoomRepository implements RoomRepositoryInterface
 {
-
     /**
      * {@inheritDoc}
      */
@@ -38,9 +36,9 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function findBySlug(string $slug): ?RoomContract
+    public function findByCode(string $code): ?RoomContract
     {
-        return Room::where('slug', $slug)->first();
+        return Room::where('code', $code)->first();
     }
 
     /**
@@ -48,10 +46,12 @@ class EloquentRoomRepository implements RoomRepositoryInterface
      */
     public function create(UserContract $owner, array $data = []): RoomContract
     {
+
+        // TODO wrap in transaction to ensure both room and round are created successfully
         $room = Room::create([
             'owner_id' => $owner->getId(),
-            'name' => $data['name'] ?? null,
-            'slug' => $this->generateUniqueSlug(),
+            'name' => $data['name'],
+            'code' => $data['code'],
         ]);
 
         // Create an initial round for the room
@@ -71,15 +71,4 @@ class EloquentRoomRepository implements RoomRepositoryInterface
         return Room::destroy($room->getId());
     }
 
-    /**
-     * Generate a unique slug for the room.
-     */
-    protected function generateUniqueSlug(): string
-    {
-        do {
-            $slug = Str::random(8);
-        } while (Room::where('slug', $slug)->exists());
-
-        return $slug;
-    }
 }

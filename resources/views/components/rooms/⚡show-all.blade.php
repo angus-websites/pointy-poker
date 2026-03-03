@@ -20,7 +20,7 @@ new class extends Component {
     <ul class="gap-y-4 flex flex-col">
         @forelse ($this->rooms as $room)
             <li wire:key="{{ $room->id }}">
-                <a href="{{route('rooms.show', ['slug' => $room->slug])}}" aria-label="Go to {{ $room->name }} room"
+                <a href="{{route('rooms.show', ['code' => $room->code])}}" aria-label="Go to {{ $room->name }} room"
                    wire:navigate>
                     <flux:card size="sm" class="hover:bg-zinc-50 dark:hover:bg-zinc-700">
                         <flux:heading class="flex items-center gap-2">{{ $room->name }}

@@ -5,9 +5,8 @@ namespace App\Contracts\Repository;
 use App\Contracts\Model\RoomContract;
 use App\Contracts\Model\UserContract;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 
-interface RoomRepositoryInterface
+interface RoomRepositoryInterface extends CodeRepositoryInterface
 {
 
     /**
@@ -26,7 +25,7 @@ interface RoomRepositoryInterface
     /**
      * Find room by slug.
      */
-    public function findBySlug(string $slug): ?RoomContract;
+    public function findByCode(string $code): ?RoomContract;
 
     /**
      * Create a new room for a user.

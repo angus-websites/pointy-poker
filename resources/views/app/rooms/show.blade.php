@@ -7,7 +7,7 @@
                 {{$room->name}}
             </flux:heading>
             <flux:text class="mt-2">
-                Code to Join: <span class="font-mono ml-2 text-lg">{{ $room->slug }}</span>
+                Code to Join: <span class="font-mono ml-2 text-lg">{{ $room->getCode() }}</span>
             </flux:text>
         </div>
         <div>

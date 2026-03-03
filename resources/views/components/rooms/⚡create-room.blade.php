@@ -17,10 +17,21 @@ new class extends Component {
         // Validate input
         $data = $this->validate();
 
-        // Create entry
-        $roomService->create(
-            name: $data['name'],
-        );
+        try{
+            // Create entry
+            $roomService->create(
+                name: $data['name'],
+            );
+        }
+        catch (\Exception) {
+            // Show error toast
+            Flux::toast(
+                text: "An error occurred while creating the room. Please try again.",
+                variant: 'danger',
+            );
+            return;
+        }
+
 
         Flux::toast(
             text: "Your room has been created successfully.",

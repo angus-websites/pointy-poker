@@ -18,9 +18,9 @@ class RoomController extends Controller
         return view('app.rooms.index');
     }
 
-    public function show(string $slug): Factory|View|RedirectResponse
+    public function show(string $code): Factory|View|RedirectResponse
     {
-        $room = $this->roomService->getRoomBySlug($slug);
+        $room = $this->roomService->getRoomByCode($code);
 
         $ownerCookieName = 'pokey_owner_'.$room->getId();
         $participantCookieName = 'pokey_participant_'.$room->getId();

@@ -2,7 +2,6 @@
 
 use App\Contracts\Model\RoomContract;
 use App\Services\RoomService;
-use Illuminate\Http\RedirectResponse;
 use Livewire\Component;
 
 new class extends Component {
@@ -29,7 +28,7 @@ new class extends Component {
         );
 
         // Redirect to join room again
-        return redirect()->route('rooms.show', ['slug' => $this->room->slug]);
+        return redirect()->route('rooms.show', ['code' => $this->room->getCode()]);
     }
 };
 ?>

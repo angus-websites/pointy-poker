@@ -14,20 +14,21 @@ new class extends Component {
 
     public function joinRoom(RoomService $roomService)
     {
-
         // Validate
         $this->validate();
 
+        // Convert to uppercase
+        $this->roomCode = strtoupper($this->roomCode);
+
         // Handle the logic to join a room here
         try {
-            $room = $roomService->getRoomBySlug($this->roomCode);
-        } catch (ModelNotFoundException)
-        {
+            $room = $roomService->getRoomByCode($this->roomCode);
+        } catch (ModelNotFoundException) {
             return $this->addError('roomCode', 'Room not found. Please check the code and try again.');
         }
 
         // Redirect to the room page
-        return redirect()->route('rooms.show', ['slug' => $room->slug]);
+        return redirect()->route('rooms.show', ['code' => $room->code]);
     }
 };
 ?>
@@ -47,7 +48,7 @@ new class extends Component {
                     id="roomCode"
                     placeholder="ABC123"
                     required
-                    class="px-5 py-7 font-mono text-2xl w-full border rounded-lg block
+                    class="uppercase px-5 py-7 font-mono text-2xl w-full border rounded-lg block
                    disabled:shadow-none dark:shadow-none appearance-none h-10
                    leading-5.5 ps-3 pe-20   <!-- extra right padding -->
                    bg-white dark:bg-white/10 dark:disabled:bg-white/7

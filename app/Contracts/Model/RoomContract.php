@@ -20,9 +20,9 @@ interface RoomContract
     public function getName(): string;
 
     /**
-     * Get the slug for the room.
+     * Get the code for the room.
      */
-    public function getSlug(): string;
+    public function getCode(): string;
 
     /**
      * Get the ID of the owner.

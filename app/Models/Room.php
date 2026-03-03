@@ -17,13 +17,13 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property int $owner_id
  * @property string $name
- * @property string $slug
+ * @property string $code
  */
 class Room extends Model implements RoomContract
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'owner_id', 'slug'];
+    protected $fillable = ['name', 'owner_id', 'code'];
 
     /** ---------------- Eloquent Relations ---------------- */
     public function owner(): BelongsTo
@@ -62,9 +62,9 @@ class Room extends Model implements RoomContract
     /**
      * {@inheritDoc}
      */
-    public function getSlug(): string
+    public function getCode(): string
     {
-        return $this->slug;
+        return $this->code;
     }
 
     /**
