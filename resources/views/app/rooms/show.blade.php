@@ -6,6 +6,9 @@
             <flux:heading size="xl" level="1">
                 {{$room->name}}
             </flux:heading>
+            <flux:text class="mt-2">
+                Code to Join: <span class="font-mono ml-2 text-lg">{{ $room->slug }}</span>
+            </flux:text>
         </div>
         <div>
             <flux:button>Copy Link</flux:button>
@@ -14,7 +17,7 @@
     <flux:separator variant="subtle"/>
 
     {{-- Grid --}}
-    <main class="mt-16">
+    <main class="mt-10">
         <div class="mx-auto">
             <!-- Main 3 column grid -->
             <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-4 lg:gap-8">
