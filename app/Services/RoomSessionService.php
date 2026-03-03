@@ -23,9 +23,12 @@ class RoomSessionService
     public function newRound(RoomContract $room): RoundContract
     {
         // Create a new round for the room
-        return $this->roundRepository->createForRoom($room);
+        $room = $this->roundRepository->createForRoom($room);
 
-        // TODO delete old rounds
+        // Delete all other rounds for the room (if any)
+        $this->roundRepository->deleteAllExcept($room);
+
+        return $room;
 
     }
 

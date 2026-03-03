@@ -25,7 +25,7 @@ interface RoundRepositoryInterface
     public function updateStatus(RoundContract $round, RoundStatus $status): void;
 
     /**
-     * Delete a round
+     * Delete all rounds for a room except the given round.
      */
-    public function delete(RoundContract $round): void;
+    public function deleteAllExcept(RoundContract $round): void;
 }

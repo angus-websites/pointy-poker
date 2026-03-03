@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\Model\ParticipantContract;
+use App\Contracts\Model\RoomContract;
 use App\Contracts\Model\RoundContract;
 use App\Contracts\Model\VoteContract;
 use App\Enum\RoundStatus;
@@ -41,6 +42,14 @@ class Round extends Model implements RoundContract
     public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getRoom(): RoomContract
+    {
+        return $this->belongsTo(Room::class, 'room_id')->first();
     }
 
     /**

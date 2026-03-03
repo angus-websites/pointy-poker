@@ -13,6 +13,11 @@ interface RoundContract
     public function getId(): int;
 
     /**
+     * Get the room that this round belongs to.
+     */
+    public function getRoom(): RoomContract;
+
+    /**
      * Get the status of the round.
      */
     public function getStatus(): RoundStatus;

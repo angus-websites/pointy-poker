@@ -40,8 +40,10 @@ class EloquentRoundRepository implements RoundRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function delete(RoundContract $round): void
+    public function deleteAllExcept(RoundContract $round): void
     {
-        Round::destroy($round->getId());
+        Round::where('room_id', $round->getRoom()->getId())
+            ->where('id', '!=', $round->getId())
+            ->delete();
     }
 }
