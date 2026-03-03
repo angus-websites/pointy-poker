@@ -8,3 +8,6 @@
 - Add way to forget user cookie
 - Slug generator service with auto increment
 - Secret SLUG
+- tests
+- CRUD rooms
+- Remove unused methods in contracts

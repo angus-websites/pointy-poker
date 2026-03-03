@@ -17,11 +17,6 @@ interface ParticipantRepositoryInterface
     public function getActiveForRoom(RoomContract $room, int $seconds = 10): Collection;
 
     /**
-     * A heartbeat method to update the last active timestamp of a participant.
-     */
-    public function touch(ParticipantContract $participant): void;
-
-    /**
      * Add a new participant to a room.
      */
     public function create(RoomContract $room, array $data): ParticipantContract;

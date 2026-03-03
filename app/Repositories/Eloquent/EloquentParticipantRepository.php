@@ -25,11 +25,9 @@ class EloquentParticipantRepository implements ParticipantRepositoryInterface
     /**
      * {@inheritDoc}
      */
-    public function touch(ParticipantContract $participant): void
+    public function ping(ParticipantContract $participant): void
     {
-        $participant->update([
-            'last_seen_at' => now(),
-        ]);
+        $participant->ping();
     }
 
     /**

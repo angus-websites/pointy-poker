@@ -19,10 +19,6 @@ interface RoundRepositoryInterface
      */
     public function createForRoom(RoomContract $room, RoundStatus $status = RoundStatus::IDLE): RoundContract;
 
-    /**
-     * Update the status of a round.
-     */
-    public function updateStatus(RoundContract $round, RoundStatus $status): void;
 
     /**
      * Delete all rounds for a room except the given round.
