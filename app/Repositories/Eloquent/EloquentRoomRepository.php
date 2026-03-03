@@ -8,19 +8,23 @@ use App\Contracts\Repository\RoomRepositoryInterface;
 use App\Enum\RoundStatus;
 use App\Models\Room;
 use App\Models\Round;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class EloquentRoomRepository implements RoomRepositoryInterface
 {
+
     /**
      * {@inheritDoc}
      */
-    public function getByOwner(UserContract $owner): Collection
-    {
-        return Room::where('owner_id', $owner->getId())
+    public function paginate(
+        UserContract $user,
+        int $perPage
+    ): LengthAwarePaginator {
+        return Room::where('owner_id', $user->getId())
             ->orderByDesc('created_at')
-            ->get();
+            ->paginate($perPage);
     }
 
     /**

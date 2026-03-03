@@ -6,3 +6,4 @@
 - SEO tags
 - OGimage
 - Create rooms and empty state
+- Add way to forget user cookie

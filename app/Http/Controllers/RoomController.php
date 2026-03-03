@@ -15,9 +15,7 @@ class RoomController extends Controller
 
     public function index(): Factory|View
     {
-        $rooms = $this->roomService->getOwnedRooms(auth()->user());
-
-        return view('app.rooms.index', compact('rooms'));
+        return view('app.rooms.index');
     }
 
     public function show(string $slug): Factory|View|RedirectResponse

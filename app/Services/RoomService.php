@@ -8,7 +8,9 @@ use App\Contracts\Model\UserContract;
 use App\Contracts\Repository\ParticipantRepositoryInterface;
 use App\Contracts\Repository\RoomRepositoryInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class RoomService
@@ -19,13 +21,29 @@ class RoomService
     ) {}
 
     /**
-     * Get rooms owned by a specific user.
+     * Create a new room for a user.
      *
-     * @return Collection<int, RoomContract>
+     * @param  string  $name  The name of the room
+     * @return RoomContract The created room
      */
-    public function getOwnedRooms(UserContract $user): Collection
+    public function create(string $name): RoomContract
     {
-        return $this->roomRepository->getByOwner($user);
+        $owner = Auth::user();
+
+        return $this->roomRepository->create($owner, [
+            'name' => $name,
+        ]);
+    }
+
+    /**
+     * Get paginated rooms for the authenticated user.
+     */
+    public function paginateRooms(): LengthAwarePaginator
+    {
+        $perPage = 10;
+        $user = Auth::user();
+
+        return $this->roomRepository->paginate($user, $perPage);
     }
 
     /**
