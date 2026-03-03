@@ -11,7 +11,7 @@
             </flux:text>
         </div>
         <div>
-            <flux:button>Copy Link</flux:button>
+            <livewire:rooms.copy-button button-text="Copy Link" text-to-copy="{{route('rooms.show', ['code' => $room->getCode()])}}"/>
         </div>
     </div>
     <flux:separator variant="subtle"/>
