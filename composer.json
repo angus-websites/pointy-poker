@@ -1,12 +1,14 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
     "name": "angusgoody/pointy-poker",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "type": "project",
-    "description": "A lightweight Laravel starter kit.",
+    "description": "A site for hosting planning poker",
     "keywords": [
         "laravel",
-        "framework"
+        "framework",
+        "poker",
+        "agile"
     ],
     "license": "MIT",
     "require": {
