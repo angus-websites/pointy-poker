@@ -7,7 +7,7 @@
 <meta name="description"
       content="@yield('description', 'PointyPoker lets you quickly create rooms to estimate story points with your team in real time')"/>
 <meta property="og:image" content="{{ url('assets/images/core/ogimage.jpg') }}">
-<meta property="og:title" content="@yield('og:title', "PointyPoker - Quick and Easy Story Point Estimation")))">
+<meta property="og:title" content="@yield('og:title', 'PointyPoker - Quick and Easy Story Point Estimation')">
 
 <meta name="keywords" content="@yield('keywords', 'Poker, Points, Agile, Point Poker')"/>
 
