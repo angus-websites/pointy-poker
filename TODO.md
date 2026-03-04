@@ -9,3 +9,4 @@
 - tests
 - CRUD rooms
 - Remove unused methods in contracts
+- brunoabpinto/csrf-refresh

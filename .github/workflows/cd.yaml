@@ -7,7 +7,7 @@ on:
 #      - main
 
 env:
-  IMAGE_NAME: bud
+  IMAGE_NAME: pointy-poker
   REGISTRY: ghcr.io
 
 concurrency:

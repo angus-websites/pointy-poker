@@ -24,13 +24,13 @@
             </section>
 
             {{-- Get started --}}
-            <section>
+            <section class="mt-10">
                 <p class="text-center block mb-2.5 text-base font-medium text-heading">Or</p>
 
                 <div class="mx-auto mt-5 sm:flex md:justify-center md:mt-8">
                     <div class="rounded-md shadow-sm">
                         <a href="{{ route('rooms.index') }}"
-                           class="flex w-full items-center justify-center rounded-md border border-transparent bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-600 px-8 py-3 text-base font-medium text-white  md:px-10 md:py-4 md:text-lg">
+                           class="flex w-full cursor-pointer items-center justify-center rounded-md border border-transparent bg-sky-500 hover:bg-sky-600 dark:bg-sky-500 dark:hover:bg-sky-600 px-8 py-3 text-base font-medium text-white  md:px-10 md:py-4 md:text-lg">
                             Create a room
                         </a>
                     </div>

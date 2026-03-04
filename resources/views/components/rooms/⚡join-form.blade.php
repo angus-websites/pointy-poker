@@ -40,7 +40,7 @@ new class extends Component {
         <flux:field>
             <label for="roomCode" class="block mb-2.5 text-sm font-medium text-heading">Join a Room</label>
             <!-- Input wrapper -->
-            <div class="relative w-full">
+            <div class="">
 
                 <input
                     wire:model="roomCode"
@@ -62,23 +62,15 @@ new class extends Component {
                    data-invalid:shadow-none "
                 />
 
-                <!-- Button inside input -->
-                <button
-                    type="submit"
-                    class="absolute inset-y-0 right-2 my-auto
-                   h-8 px-3 text-xs rounded
-                   text-white bg-slate-600 hover:bg-slate-700 dark:text-slate-800 dark:bg-slate-200 dark:hover:bg-slate-300
-                   border border-transparent shadow-xs
-                   cursor-pointer
-                   focus:ring-4 focus:ring-brand-medium
-                   focus:outline-none"
-                >
-                    Join
-                </button>
 
 
             </div>
             <flux:error name="roomCode"/>
+
+            <button type="submit"
+               class="mt-5 cursor-pointer w-fit mx-auto flex items-center justify-center rounded-md border border-transparent bg-zinc-500 hover:bg-zinc-600 dark:bg-zinc-500 dark:hover:bg-zinc-600 px-8 py-3 text-base font-medium text-white  md:px-8 md:py-3 md:text-lg">
+                Join
+            </button>
         </flux:field>
 
     </form>
