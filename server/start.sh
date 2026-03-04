@@ -14,4 +14,4 @@ echo "Starting worker Supervisor..."
 supervisord -c /etc/supervisord.conf &
 
 echo "Starting Octane with FrankenPHP..."
-php artisan octane:frankenphp
+php artisan octane:frankenphp --port 8001
