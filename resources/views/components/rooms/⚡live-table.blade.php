@@ -68,12 +68,14 @@ new class extends Component {
 
 <div
     x-data="{
+        isAdmin: @js(!$currentParticipantId),
         clicks: [],
         revealAll: false,
         threshold: 1000,
         timeout: null,
 
         registerClick() {
+            if (this.isAdmin) return; // Disable for admins
             const now = Date.now();
             this.clicks.push(now);
 
