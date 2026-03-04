@@ -1,4 +1,4 @@
-<x-layouts::public title="Pointy Poker">
+<x-layouts::public :title="$room->name">
     <x-page-container>
         {{-- Top Bar --}}
         <div class="flex flex-col gap-y-5 md:flex-row md:items-end md:justify-between mb-6">

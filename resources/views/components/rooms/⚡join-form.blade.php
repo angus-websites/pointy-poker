@@ -9,7 +9,7 @@ new class extends Component {
     public string $roomCode;
 
     protected $rules = [
-        'roomCode' => 'required|string|min:6|alpha_num',
+        'roomCode' => 'required|string|min:6|max:25|alpha_num',
     ];
 
     public function joinRoom(RoomService $roomService)

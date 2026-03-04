@@ -1,4 +1,4 @@
-<x-layouts::app :title="__('Room')">
+<x-layouts::app :title="$room->name">
 
     {{-- Top Bar --}}
     <div class="flex flex-col gap-y-5 md:flex-row md:items-end md:justify-between mb-6">

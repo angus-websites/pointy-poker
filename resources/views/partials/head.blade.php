@@ -5,11 +5,11 @@
 {{--Meta--}}
 <title>@yield('title', config('app.name'))</title>
 <meta name="description"
-      content="@yield('description', 'Bud is a simple boilerplate for quickly building Laravel applications')"/>
+      content="@yield('description', 'PointyPoker lets you quickly create rooms to estimate story points with your team in real time')"/>
 <meta property="og:image" content="{{ url('assets/images/core/ogimage.jpg') }}">
-<meta property="og:title" content="@yield('og:title', "Bud - Laravel Boilerplate"))">
+<meta property="og:title" content="@yield('og:title', "PointyPoker - Quick and Easy Story Point Estimation")))">
 
-<meta name="keywords" content="@yield('keywords', 'Bud')"/>
+<meta name="keywords" content="@yield('keywords', 'Poker, Points, Agile, Point Poker')"/>
 
 {{--Icons--}}
 <link rel="icon" type="image/png" href="/assets/images/core/favicon-96x96.png" sizes="96x96"/>
