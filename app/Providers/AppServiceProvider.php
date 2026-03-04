@@ -2,8 +2,14 @@
 
 namespace App\Providers;
 
-use App\Contracts\RoomRepositoryInterface;
-use App\Repositories\RoomRepository;
+use App\Contracts\Repository\ParticipantRepositoryInterface;
+use App\Contracts\Repository\RoomRepositoryInterface;
+use App\Contracts\Repository\RoundRepositoryInterface;
+use App\Contracts\Repository\VoteRepositoryInterface;
+use App\Repositories\Eloquent\EloquentParticipantRepository;
+use App\Repositories\Eloquent\EloquentRoomRepository;
+use App\Repositories\Eloquent\EloquentRoundRepository;
+use App\Repositories\Eloquent\EloquentVoteRepository;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -17,9 +23,29 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+
+        // Room repository binding
         $this->app->bind(
             RoomRepositoryInterface::class,
-            RoomRepository::class
+            EloquentRoomRepository::class
+        );
+
+        // Round repository binding
+        $this->app->bind(
+            RoundRepositoryInterface::class,
+            EloquentRoundRepository::class
+        );
+
+        // Participant repository binding
+        $this->app->bind(
+            ParticipantRepositoryInterface::class,
+            EloquentParticipantRepository::class
+        );
+
+        // Vote repository binding
+        $this->app->bind(
+            VoteRepositoryInterface::class,
+            EloquentVoteRepository::class
         );
     }
 

@@ -1,6 +1,6 @@
 <picture style="text-align: center;">
   <source media="(prefers-color-scheme: dark)" srcset="public/assets/images/logo/logo-light.png">
-  <img alt="Bud" src="public/assets/images/logo/logo.png" width="200">
+  <img alt="PointyPoker" src="public/assets/images/logo/logo.png" width="200">
 </picture>
 
 # Pointy Poker
@@ -45,7 +45,7 @@ A site to allow teams to estimate story points. Built with ...
 
 ## Paid Dependencies
 
-Bud uses [FluxUi](https://fluxui.dev/) pro components for the user interface. This is a paid package and a
+PointyPoker uses [FluxUi](https://fluxui.dev/) pro components for the user interface. This is a paid package and a
 license is
 required to install the components from their private repository.
 
@@ -184,16 +184,14 @@ This workflow expects the following secrets to be set in the `Production` enviro
 1. `COMPOSER_AUTH` - The contents of your `auth.json` file for installing paid dependencies, note this secret MUST be a
    single line JSON string otherwise the workflow will fail.
 2. `CAP_SERVER_URL` - The base URL of your CapRover server e.g `https://captain.yourdomain.com`
-3. `CAP_APP_NAME` - The name of the app on your CapRover server e.g `Bud`
+3. `CAP_APP_NAME` - The name of the app on your CapRover server e.g `PointyPoker`
 4. `CAP_APP_TOKEN` - The token for your CapRover app
 
 ## Testing
 
-Bud uses PestPHP for testing. Tests are split into Feature and Unit tests located in the `tests/Feature` and
+PointyPoker uses PestPHP for testing. Tests are split into Feature and Unit tests located in the `tests/Feature` and
 `tests/Unit` directories respectively.
 
-Bud also makes use of Pest's snapshot testing capabilities for UI components. Snapshots are stored in the
-`tests/.pest` directory.
 
 ### Running all tests
 
@@ -217,10 +215,10 @@ Build the docker image with secret auth.json manually ...
 DOCKER_BUILDKIT=1
 docker build \
   --secret id=composer_auth,src=auth.json \
-  -t bud .
+  -t pointy-poker .
 ```
 
 ### Trusted proxies
 
-Bud is currently configured to trust all proxies by default. If you need to restrict this, you can modify the
+PointyPoker is currently configured to trust all proxies by default. If you need to restrict this, you can modify the
 `bootstrap/app.php` `trustProxies` method.

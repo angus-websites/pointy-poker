@@ -2,24 +2,27 @@
 
 namespace App\Models;
 
+use App\Contracts\Model\ParticipantContract;
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
 
 /**
- * A participant in a room, which can be either an authenticated user or an anonymous visitor identified by a browser token.
+ * A participant in a room
  *
  * @property int $id
  * @property int $room_id
+ * @property string $name
  * @property string|null $token
  * @property Carbon|null $last_seen_at
  */
-class Participant extends Model
+class Participant extends Model implements ParticipantContract
 {
     protected $fillable = [
         'room_id',
         'token',
-        'display_name',
+        'name',
         'last_seen_at',
     ];
 
@@ -32,4 +35,38 @@ class Participant extends Model
         return $this->belongsTo(Room::class);
     }
 
+    /** ---------------- Contract Methods ---------------- */
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLastSeenAt(): ?CarbonInterface
+    {
+        return $this->last_seen_at;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function ping(): void
+    {
+        $this->last_seen_at = Carbon::now();
+        $this->save();
+    }
 }

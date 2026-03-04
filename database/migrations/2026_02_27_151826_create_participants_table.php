@@ -17,7 +17,7 @@ return new class extends Migration
 
             $table->string('token');
 
-            $table->string('display_name');
+            $table->string('name');
 
             $table->timestamp('last_seen_at')->nullable();
 

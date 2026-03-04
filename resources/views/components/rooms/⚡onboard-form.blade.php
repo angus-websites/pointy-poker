@@ -1,13 +1,12 @@
 <?php
 
-use App\Models\Participant;
-use App\Models\Room;
-use Illuminate\Support\Str;
+use App\Contracts\Model\RoomContract;
+use App\Services\RoomService;
 use Livewire\Component;
 
 new class extends Component {
 
-    public Room $room;
+    public RoomContract $room;
 
     public string $name = '';
 
@@ -15,39 +14,21 @@ new class extends Component {
         'name' => 'required|string|min:2|max:25',
     ];
 
-    public function join()
+
+    public function join(RoomService $roomService)
     {
 
         // Validate input
         $this->validate();
 
-        // Generate unique browser token
-        // TODO use service
-        $token = (string)Str::uuid();
-
-        // TODO use service here
-        $participant = Participant::create([
-            'room_id' => $this->room->id,
-            'display_name' => $this->name,
-            'token' => $token,
-            'last_seen_at' => now(),
-        ]);
-
-        // TODO use service to handle cookie and token management
-        cookie()->queue('room_token_' . $this->room->id, $token, 60 * 24 * 365);
-
-        // Notify parent component / refresh UI
-        //$this->dispatch('participantJoined');
-
-        // Log joining event
-        logger()->info('Participant joined room', [
-            'room_id' => $this->room->id,
-            'participant_id' => $participant->id,
-            'participant_name' => $participant->name,
-        ]);
+        // Create participant
+        $roomService->createParticipant(
+            room: $this->room,
+            name: $this->name,
+        );
 
         // Redirect to join room again
-        return redirect()->route('rooms.show', ['slug' => $this->room->slug]);
+        return redirect()->route('rooms.show', ['code' => $this->room->getCode()]);
     }
 };
 ?>

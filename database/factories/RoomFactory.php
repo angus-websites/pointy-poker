@@ -16,7 +16,7 @@ class RoomFactory extends Factory
         return [
             'owner_id' => User::factory(),
             'name' => $this->faker->words(3, true),
-            'slug' => Str::random(8),
+            'code' => Str::upper(Str::random(6)),
         ];
     }
 
@@ -30,13 +30,4 @@ class RoomFactory extends Factory
         ]);
     }
 
-    /**
-     * Give a fixed slug.
-     */
-    public function withSlug(string $slug): static
-    {
-        return $this->state(fn () => [
-            'slug' => $slug,
-        ]);
-    }
 }

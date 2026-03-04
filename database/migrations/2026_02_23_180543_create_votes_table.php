@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('round_id')->constrained()->cascadeOnDelete();
             $table->foreignId('participant_id')->constrained()->cascadeOnDelete();
-
             $table->string('value');
             $table->timestamps();
 

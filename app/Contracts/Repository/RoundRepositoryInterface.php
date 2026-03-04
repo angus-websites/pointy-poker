@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Contracts\Repository;
+
+use App\Contracts\Model\RoomContract;
+use App\Contracts\Model\RoundContract;
+use App\Enum\RoundStatus;
+
+
+interface RoundRepositoryInterface
+{
+    /**
+     * Get the current active round for a room, or null if there is no active round.
+     */
+    public function getCurrentForRoom(RoomContract $room): ?RoundContract;
+
+    /**
+     * Create a new round for a room with the given status.
+     */
+    public function createForRoom(RoomContract $room, RoundStatus $status = RoundStatus::IDLE): RoundContract;
+
+
+    /**
+     * Delete all rounds for a room except the given round.
+     */
+    public function deleteAllExcept(RoundContract $round): void;
+}
