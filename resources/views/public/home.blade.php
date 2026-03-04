@@ -24,7 +24,7 @@
             </section>
 
             {{-- Get started --}}
-            <section class="mt-24">
+            <section class="mt-10">
                 <p class="text-center block mb-2.5 text-base font-medium text-heading">Or</p>
 
                 <div class="mx-auto mt-5 sm:flex md:justify-center md:mt-8">

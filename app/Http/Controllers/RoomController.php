@@ -35,7 +35,7 @@ class RoomController extends Controller
         if (auth()->check() && $room->getOwnerId() === auth()->id()) {
 
             // If owner is not verified → force verification
-            if (!auth()->user()->hasVerifiedEmail()) {
+            if (! auth()->user()->hasVerifiedEmail()) {
                 return redirect()
                     ->route('verification.notice')
                     ->with('message', 'Please verify your email to access your room.');
@@ -71,7 +71,6 @@ class RoomController extends Controller
             try {
                 $participantData = json_decode(decrypt($cookie), true);
                 $participant = $room->getParticipantByToken($participantData['token'] ?? '');
-
 
                 if (! $participant) {
                     cookie()->queue(cookie()->forget($participantCookieName));
