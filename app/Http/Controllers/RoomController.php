@@ -34,6 +34,13 @@ class RoomController extends Controller
         // If logged-in owner
         if (auth()->check() && $room->getOwnerId() === auth()->id()) {
 
+            // If owner is not verified → force verification
+            if (!auth()->user()->hasVerifiedEmail()) {
+                return redirect()
+                    ->route('verification.notice')
+                    ->with('message', 'Please verify your email to access your room.');
+            }
+
             // Store owner cookie for future detection
             cookie()->queue(
                 cookie($ownerCookieName, encrypt(auth()->id()), 60 * 24 * 30) // 30 days
