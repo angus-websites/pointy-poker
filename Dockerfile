@@ -38,7 +38,8 @@ RUN apk add --no-cache \
     git \
     oniguruma-dev \
     icu-dev \
-    libzip-dev
+    libzip-dev \
+    supervisor
 
 RUN install-php-extensions \
     pcntl \
