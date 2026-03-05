@@ -87,7 +87,7 @@ new class extends Component {
                     </flux:accordion.content>
                 </flux:accordion.item>
             </flux:accordion>
-            
+
             <flux:input
                 wire:model="password"
                 :label="__('New password')"

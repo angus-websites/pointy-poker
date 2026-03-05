@@ -10,3 +10,4 @@
 - CRUD rooms
 - Remove unused methods in contracts
 - brunoabpinto/csrf-refresh
+- Add component for password requirements accordion
