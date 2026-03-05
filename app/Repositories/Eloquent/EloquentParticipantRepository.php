@@ -15,7 +15,7 @@ class EloquentParticipantRepository implements ParticipantRepositoryInterface
      */
     public function getActiveForRoom(RoomContract $room, int $seconds = 10): Collection
     {
-        $cutoff = now()->subSeconds($seconds);
+        $cutoff = now()->subHour();
 
         return Participant::where('room_id', $room->getId())
             ->where('last_seen_at', '>=', $cutoff)
