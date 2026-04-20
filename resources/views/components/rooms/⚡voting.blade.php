@@ -12,7 +12,7 @@ new class extends Component {
     #[Reactive]
     public ?string $currentVote = null;
 
-    protected array $points = ['1', '2', '3', '5', '8', '13', '20'];
+    protected array $points = ['1', '2', '3', '5', '8', '13', '21'];
 
     public function canVote(): bool
     {
