@@ -36,34 +36,27 @@ class Participant extends Model implements ParticipantContract
     }
 
     /** ---------------- Contract Methods ---------------- */
-
-    /**
-     * {@inheritDoc}
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    public function updateName(string $name): void
+    {
+        $this->name = $name;
+        $this->save();
+    }
+
     public function getLastSeenAt(): ?CarbonInterface
     {
         return $this->last_seen_at;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function ping(): void
     {
         $this->last_seen_at = Carbon::now();
