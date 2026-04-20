@@ -36,6 +36,14 @@
     }
 }
 
+
+/* Blur for Modal*/
+dialog[data-modal]::backdrop {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
 [data-flux-field]:not(ui-radio, ui-checkbox) {
     @apply grid gap-2;
 }
