@@ -120,6 +120,4 @@ class Room extends Model implements RoomContract
             ->latest()
             ->first();
     }
-
-
 }

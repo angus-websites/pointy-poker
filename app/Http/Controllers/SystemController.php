@@ -14,9 +14,7 @@ class SystemController extends Controller
 {
     public function __construct(
         protected ApplicationVersionService $applicationVersionService,
-    )
-    {
-    }
+    ) {}
 
     public function version(): JsonResponse
     {
