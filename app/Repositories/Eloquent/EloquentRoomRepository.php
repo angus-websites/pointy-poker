@@ -9,7 +9,6 @@ use App\Enum\RoundStatus;
 use App\Models\Room;
 use App\Models\Round;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Str;
 
 class EloquentRoomRepository implements RoomRepositoryInterface
 {
@@ -70,5 +69,4 @@ class EloquentRoomRepository implements RoomRepositoryInterface
     {
         return Room::destroy($room->getId());
     }
-
 }

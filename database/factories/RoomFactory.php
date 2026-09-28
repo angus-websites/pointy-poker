@@ -29,5 +29,4 @@ class RoomFactory extends Factory
             'owner_id' => $user->id,
         ]);
     }
-
 }

@@ -46,7 +46,6 @@ interface RoomContract
      */
     public function getParticipantByToken(string $token): ?ParticipantContract;
 
-
     /**
      * Get all rounds for the room.
      *
@@ -58,6 +57,4 @@ interface RoomContract
      * Get the current/latest round.
      */
     public function getCurrentRound(): ?RoundContract;
-
-
 }

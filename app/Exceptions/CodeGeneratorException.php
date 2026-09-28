@@ -2,6 +2,4 @@
 
 namespace App\Exceptions;
 
-class CodeGeneratorException extends \Exception
-{
-}
+class CodeGeneratorException extends \Exception {}

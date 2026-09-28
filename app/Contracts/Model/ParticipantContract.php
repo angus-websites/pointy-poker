@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Contracts\Model;
 
 use Carbon\CarbonInterface;
@@ -29,5 +30,4 @@ interface ParticipantContract
      * Update the last seen timestamp to now.
      */
     public function ping(): void;
-
 }

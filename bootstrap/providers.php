@@ -1,9 +1,11 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+use App\Providers\FortifyServiceProvider;
 use Mailjet\LaravelMailjet\MailjetServiceProvider;
 
 return [
-    App\Providers\AppServiceProvider::class,
-    App\Providers\FortifyServiceProvider::class,
+    AppServiceProvider::class,
+    FortifyServiceProvider::class,
     MailjetServiceProvider::class,
 ];

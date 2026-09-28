@@ -8,7 +8,6 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface RoomRepositoryInterface extends CodeRepositoryInterface
 {
-
     /**
      * Get paginated rooms for a user.
      */
