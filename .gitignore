@@ -21,11 +21,15 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
 .mcp.json
 /.claude
 CLAUDE.md
 .github/copilot
 .github/copilot-instructions.md
+.github/skills
+AGENTS.md
+
 *.DS_Store
 **/caddy
 frankenphp
