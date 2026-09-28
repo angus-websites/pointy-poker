@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ApplicationVersionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 /**
@@ -12,6 +12,12 @@ use Illuminate\View\View;
  */
 class SystemController extends Controller
 {
+    public function __construct(
+        protected ApplicationVersionService $applicationVersionService,
+    )
+    {
+    }
+
     public function version(): JsonResponse
     {
         return response()->json([
@@ -46,13 +52,6 @@ class SystemController extends Controller
      */
     protected function composerVersion(): string
     {
-        return Cache::remember('app.version', now()->addMinutes(5), function () {
-            $composer = json_decode(
-                file_get_contents(base_path('composer.json')),
-                true
-            );
-
-            return $composer['version'] ?? 'unknown';
-        });
+        return $this->applicationVersionService->composerVersion();
     }
 }
