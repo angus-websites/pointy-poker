@@ -6,6 +6,9 @@ php artisan config:clear
 php artisan view:clear
 #php artisan filament:optimize
 
+# Clear version cache
+php artisan app:clear-version-cache
+
 # Migrate the database
 php artisan migrate --force
 
