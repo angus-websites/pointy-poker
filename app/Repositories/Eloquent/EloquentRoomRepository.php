@@ -12,9 +12,6 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class EloquentRoomRepository implements RoomRepositoryInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function paginate(
         UserContract $user,
         int $perPage
@@ -24,25 +21,16 @@ class EloquentRoomRepository implements RoomRepositoryInterface
             ->paginate($perPage);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function findById(int $id): ?RoomContract
     {
         return Room::find($id);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function findByCode(string $code): ?RoomContract
     {
         return Room::where('code', $code)->first();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function create(UserContract $owner, array $data = []): RoomContract
     {
 
@@ -62,9 +50,6 @@ class EloquentRoomRepository implements RoomRepositoryInterface
         return $room;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function delete(RoomContract $room): bool
     {
         return Room::destroy($room->getId());

@@ -29,34 +29,21 @@ class Vote extends Model implements VoteContract
     }
 
     /** ---------------- Contract Methods ---------------- */
-
-    /**
-     * {@inheritDoc}
-     */
     public function getParticipantId(): int
     {
         return $this->participant_id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRoundId(): int
     {
         return $this->round_id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getValue(): string
     {
         return $this->value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setValue(string $value): void
     {
         $this->value = $value;

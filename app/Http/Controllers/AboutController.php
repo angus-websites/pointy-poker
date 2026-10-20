@@ -15,7 +15,7 @@ class AboutController extends Controller
 
         $markdown = File::get(resource_path('markdown/privacy.md'));
 
-        return view('public.privacy-policy', [
+        return view('pages.public.privacy-policy', [
             'markdown' => Str::markdown($markdown),
         ]);
     }

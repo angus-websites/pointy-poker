@@ -35,59 +35,37 @@ class Round extends Model implements RoundContract
     }
 
     /** ---------------- Contract Methods ---------------- */
-
-    /**
-     * {@inheritDoc}
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRoom(): RoomContract
     {
         return $this->belongsTo(Room::class, 'room_id')->first();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getStatus(): RoundStatus
     {
         return $this->status;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function setStatus(RoundStatus $status): void
     {
         $this->status = $status;
         $this->save();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getVotes(): Collection
     {
         return $this->votes()->get();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getVote(ParticipantContract $participant): ?VoteContract
     {
         return $this->votes()->where('participant_id', $participant->getId())->first();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function castVote(ParticipantContract $participant, string $value): void
     {
         $existingVote = $this->getVote($participant);

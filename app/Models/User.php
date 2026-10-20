@@ -76,34 +76,21 @@ class User extends Authenticatable implements MustVerifyEmail, UserContract
     }
 
     /** ---------------- Contract Methods ---------------- */
-
-    /**
-     * {@inheritDoc}
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRooms(): Collection
     {
         return $this->hasMany(Room::class, 'owner_id')->get();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function ownsRoom(RoomContract $room): bool
     {
         return $room->getOwnerId() === $this->id;

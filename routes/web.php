@@ -6,7 +6,7 @@ use App\Http\Controllers\SystemController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('public.home');
+    return view('pages.public.home');
 })->name('home');
 
 // Room route
