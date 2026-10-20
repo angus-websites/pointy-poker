@@ -15,7 +15,7 @@ class RoomController extends Controller
 
     public function index(): Factory|View
     {
-        return view('app.rooms.index');
+        return view('pages.app.rooms.index');
     }
 
     public function show(string $code): Factory|View|RedirectResponse
@@ -46,7 +46,7 @@ class RoomController extends Controller
                 cookie($ownerCookieName, encrypt(auth()->id()), 60 * 24 * 30) // 30 days
             );
 
-            return view('app.rooms.show', compact('room'));
+            return view('pages.app.rooms.show', compact('room'));
         }
 
         // If owner cookie exists but user is not authenticated → force login
@@ -75,7 +75,7 @@ class RoomController extends Controller
                 if (! $participant) {
                     cookie()->queue(cookie()->forget($participantCookieName));
                 } else {
-                    return view('public.rooms.show', compact('room', 'participant'));
+                    return view('pages.public.rooms.show', compact('room', 'participant'));
                 }
 
             } catch (\Throwable $e) {
@@ -90,6 +90,6 @@ class RoomController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        return view('public.rooms.onboarding', compact('room'));
+        return view('pages.public.rooms.onboarding', compact('room'));
     }
 }
