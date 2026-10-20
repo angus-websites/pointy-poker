@@ -6,7 +6,7 @@ use App\Models\User;
 test('privacy policy returns 200', function () {
     $this->get(route('privacy-policy'))
         ->assertStatus(200);
-});
+})->doesNotPerformAssertions();
 
 test('version endpoint returns 200', function () {
     $this->get('/version')
@@ -14,7 +14,7 @@ test('version endpoint returns 200', function () {
 });
 
 test('info endpoint returns 200', function () {
-    $this->get('/info')
+    $this->getJson('/info')
         ->assertStatus(200);
 });
 
@@ -24,7 +24,7 @@ test('authenticated user can visit rooms index', function () {
 
     $this->get(route('rooms.index'))
         ->assertStatus(200);
-});
+})->doesNotPerformAssertions();
 
 test('authenticated user can visit a room', function () {
     $user = User::factory()->create();
@@ -34,4 +34,4 @@ test('authenticated user can visit a room', function () {
 
     $this->get(route('rooms.show', ['code' => $room->code]))
         ->assertStatus(200);
-});
+})->doesNotPerformAssertions();
