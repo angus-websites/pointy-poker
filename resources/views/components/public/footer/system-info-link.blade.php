@@ -5,4 +5,3 @@
         </svg>
     </flux:link>
 </flux:tooltip>
-
