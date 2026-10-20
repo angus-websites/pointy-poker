@@ -36,11 +36,11 @@ new class extends Component {
             ],
 
             RoundStatus::REVEALED => [
-                'description' => 'Click "Reset" to clear estimates and start a new round.',
+                'description' => 'Click "Reset" to start a new voting round.',
                 'button' => [
-                    'label' => 'Reset',
-                    'event' => 'new-round',
-                    'color' => 'amber',
+                    'label' => 'Vote again',
+                    'event' => 'begin-voting',
+                    'color' => 'lime',
                 ],
             ],
         };
@@ -70,13 +70,26 @@ new class extends Component {
 
     <div>
         @if($showButton)
-            <flux:button
-                variant="primary"
-                color="{{ $meta['button']['color'] }}"
-                wire:click="$dispatch('{{ $meta['button']['event'] }}')"
-            >
-                {{ $meta['button']['label'] }}
-            </flux:button>
+            <div class="flex gap-2">
+                @if($this->status === RoundStatus::REVEALED)
+                    <flux:button
+                        variant="danger"
+                        wire:click="$dispatch('new-round')"
+                    >
+                        End
+                    </flux:button>
+                @endif
+
+                <flux:button
+                    variant="primary"
+                    color="{{ $meta['button']['color'] }}"
+                    wire:click="$dispatch('{{ $meta['button']['event'] }}')"
+                >
+                    {{ $meta['button']['label'] }}
+                </flux:button>
+
+
+            </div>
         @endif
     </div>
 </div>
