@@ -10,9 +10,6 @@ use Illuminate\Support\Collection;
 
 class EloquentParticipantRepository implements ParticipantRepositoryInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function getActiveForRoom(RoomContract $room, int $seconds = 10): Collection
     {
         $cutoff = now()->subHour();
@@ -22,17 +19,11 @@ class EloquentParticipantRepository implements ParticipantRepositoryInterface
             ->get();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function ping(ParticipantContract $participant): void
     {
         $participant->ping();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function create(RoomContract $room, array $data): ParticipantContract
     {
 

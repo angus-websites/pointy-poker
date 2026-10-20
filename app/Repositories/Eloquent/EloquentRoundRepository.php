@@ -10,17 +10,11 @@ use App\Models\Round;
 
 class EloquentRoundRepository implements RoundRepositoryInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function getCurrentForRoom(RoomContract $room): ?RoundContract
     {
         return $room->getCurrentRound();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function createForRoom(RoomContract $room, RoundStatus $status = RoundStatus::IDLE): RoundContract
     {
         return Round::create([
@@ -29,17 +23,11 @@ class EloquentRoundRepository implements RoundRepositoryInterface
         ]);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function updateStatus(RoundContract $round, RoundStatus $status): void
     {
         $round->setStatus($status);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function deleteAllExcept(RoundContract $round): void
     {
         Round::where('room_id', $round->getRoom()->getId())

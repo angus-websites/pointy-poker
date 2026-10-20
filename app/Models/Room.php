@@ -42,50 +42,31 @@ class Room extends Model implements RoomContract
     }
 
     /** ---------------- Contract Methods ---------------- */
-
-    /**
-     * {@inheritDoc}
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getCode(): string
     {
         return $this->code;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getOwnerId(): int
     {
         return $this->owner_id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getParticipants(): Collection
     {
         return $this->participants()->get();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getParticipant(int $participantId): ?ParticipantContract
     {
         return $this->participants()
@@ -93,9 +74,6 @@ class Room extends Model implements RoomContract
             ->first();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getParticipantByToken(string $token): ?ParticipantContract
     {
         return $this->participants()
@@ -103,17 +81,11 @@ class Room extends Model implements RoomContract
             ->first();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getRounds(): Collection
     {
         return $this->rounds()->get();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getCurrentRound(): ?RoundContract
     {
         return $this->rounds()

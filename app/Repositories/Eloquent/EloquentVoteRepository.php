@@ -11,17 +11,11 @@ use Illuminate\Support\Collection;
 
 class EloquentVoteRepository implements VoteRepositoryInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function getForRound(RoundContract $round): Collection
     {
         return Vote::where('round_id', $round->getId())->get();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getForParticipant(RoundContract $round, ParticipantContract $participant): ?VoteContract
     {
         return Vote::where('round_id', $round->getId())
@@ -29,9 +23,6 @@ class EloquentVoteRepository implements VoteRepositoryInterface
             ->first();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function cast(RoundContract $round, ParticipantContract $participant, string $value): VoteContract
     {
         return Vote::updateOrCreate(
