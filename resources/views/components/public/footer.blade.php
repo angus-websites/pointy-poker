@@ -6,7 +6,7 @@
             <x-public.footer.system-info-link/>
 
             <!-- Branding Section -->
-            <p class="text-base text-gray-500 flex-1">
+            <p class="text-base text-gray-500 dark:text-zinc-100/60 flex-1">
                 &copy; {{ date('Y') }} {{ config('app.name') }} | Made by Angus
             </p>
 
