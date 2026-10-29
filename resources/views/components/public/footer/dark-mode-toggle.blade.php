@@ -2,6 +2,8 @@
     <flux:button
         square
         variant="subtle"
+        aria-label="Toggle dark mode"
+        class="min-h-11 min-w-11"
         x-data
         x-on:click="$flux.dark = ! $flux.dark"
     >
