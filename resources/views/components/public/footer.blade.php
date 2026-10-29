@@ -9,15 +9,7 @@
                 <span aria-hidden="true" class="hidden sm:inline">|</span>
                 <flux:link wire:navigate href="{{route('privacy-policy')}}" variant="ghost" class="inline-flex min-h-11 items-center sm:min-h-0">Privacy Policy</flux:link>
                 <span aria-hidden="true" class="hidden sm:inline">|</span>
-                <span class="inline-flex flex-wrap items-center justify-center gap-2">Made by
-                    <a
-                        class="text-pink-500 dark:text-pink-400 inline-flex min-h-11 items-center gap-1 sm:min-h-0"
-                        target="_blank"
-                        href="https://berrybits.dev"
-                    >
-                        <flux:icon.berry class="w-4 h-4"/>
-                        BerryBits
-                    </a>
+                <span class="inline-flex flex-wrap items-center justify-center gap-2">Made by Angus
                 </span>
             </p>
 
