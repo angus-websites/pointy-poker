@@ -27,6 +27,10 @@ new class extends Component {
 
     public function beginVoting(): void
     {
+        if ($this->room->getCurrentRound()?->getStatus() === RoundStatus::REVEALED) {
+            app(RoomSessionService::class)->newRound($this->room);
+        }
+
         $this->updateStatus(RoundStatus::VOTING);
     }
 
